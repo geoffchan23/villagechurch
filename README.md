@@ -45,7 +45,8 @@ and set `showThemePicker = false` in `src/data/site.ts`.
 Five experimental themes live in `src/styles/wild.css` — Watercolour, Swiss Grid, Aurora, Riso Zine
 and Desktop 98. They re-lay the page (painted illustration hero, bento tiles, windows, a scrolling
 banner) using CSS only, so content and SEO are identical. Their art is in `src/assets/fx/`
-(hand-written SVG with paint/grain filters).
+(hand-written SVG with paint/grain filters). Watercolour also swaps the team photos for painted
+portraits in `src/assets/team/paint/`, made from the real photos with `scripts/watercolour-portraits.html`.
 
 ## SEO & AI assistants
 

@@ -1102,3 +1102,14 @@
 :root[data-theme='desktop'] .series-strip {
   --bg: #c0c0c0;
 }
+/* Watercolour: painted portraits replace the team photos. */
+:root[data-theme='watercolour'] .person__photo {
+  display: none;
+}
+:root[data-theme='watercolour'] .person__paint {
+  display: block;
+  width: 115%;
+  max-width: none;
+  margin: -1rem -7.5% 0.25rem;
+  aspect-ratio: 1;
+}

@@ -12,6 +12,9 @@ import lunch from '../assets/lunch.jpg';
 
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/team/*.jpg', { eager: true });
 const photo = (name: string) => photos[`../assets/team/${name}.jpg`].default;
+// Watercolour portraits painted from the same photos; only the Watercolour theme shows (and loads) them.
+const paints = import.meta.glob<{ default: ImageMetadata }>('../assets/team/paint/*.png', { eager: true });
+const paint = (name: string) => paints[`../assets/team/paint/${name}.png`]?.default;
 
 const [latest, ...recent] = sermons;
 const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.city}`);
@@ -130,6 +133,7 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
           team.map((m) => (
             <article class="person">
               <Image src={photo(m.photo)} alt={m.name} width={320} height={320} class="person__photo" />
+              {paint(m.photo) && <Image src={paint(m.photo)!} alt={`Watercolour portrait of ${m.name}`} widths={[320, 640]} sizes="(max-width: 760px) 90vw, 16rem" format="webp" loading="lazy" class="person__paint" />}
               <h3>{m.name}</h3>
               <p class="person__role">{m.role}</p>
               <p class="person__bio">{m.bio}</p>
@@ -352,6 +356,9 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     border-radius: var(--person-radius);
     filter: var(--photo-filter);
     margin-bottom: 1rem;
+  }
+  .person__paint {
+    display: none;
   }
   .person h3 {
     margin-bottom: 0;
