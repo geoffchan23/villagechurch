@@ -12,6 +12,16 @@ export const themes = [
   { id: 'slate', name: 'Slate', note: 'Cool blue-grey, navy masthead, teal' },
   { id: 'orchard', name: 'Orchard', note: 'Sage-green page with cream cards, terracotta' },
   { id: 'rose', name: 'Rosé', note: 'Blush pink and burgundy, centred and elegant' },
+  // Experimental: these change layout and illustration, not just colour.
+  { id: 'watercolour', name: 'Watercolour', note: 'Hand-painted landscape, brushy edges, handwriting', wild: true },
+  { id: 'swiss', name: 'Swiss Grid', note: 'Giant type, numbered sections, signal red', wild: true },
+  { id: 'aurora', name: 'Aurora', note: 'Glowing gradients, frosted-glass bento tiles', wild: true },
+  { id: 'zine', name: 'Riso Zine', note: 'Risograph print — yellow, pink, halftones, tape', wild: true },
+  { id: 'desktop', name: 'Desktop 98', note: 'Retro computer — every section is a window', wild: true },
+];
+const groups = [
+  { label: 'Preview a theme', items: themes.filter((t) => !('wild' in t)) },
+  { label: 'Experimental layouts', items: themes.filter((t) => 'wild' in t) },
 ];
 ---
 
@@ -21,27 +31,31 @@ export const themes = [
     <span>Theme</span>
   </button>
   <div class="tp__panel" id="tp-panel" hidden>
-    <p class="tp__head">Preview a theme</p>
-    <ul class="tp__list">
-      {
-        themes.map((t) => (
-          <li>
-            <button type="button" class="tp__opt" data-set-theme={t.id} aria-pressed="false">
-              <span class="tp__sw" data-theme={t.id} aria-hidden="true">
-                <span style="background:var(--bg)" />
-                <span style="background:var(--inverse-bg)" />
-                <span style="background:var(--accent)" />
-                <span style="background:var(--tint)" />
-              </span>
-              <span class="tp__txt">
-                <span class="tp__name" data-theme={t.id} style="font-style:var(--heading-style)">{t.name}</span>
-                <span class="tp__note">{t.note}</span>
-              </span>
-            </button>
-          </li>
-        ))
-      }
-    </ul>
+    {
+      groups.map((g) => (
+        <>
+          <p class="tp__head">{g.label}</p>
+          <ul class="tp__list">
+            {g.items.map((t) => (
+              <li>
+                <button type="button" class="tp__opt" data-set-theme={t.id} aria-pressed="false">
+                  <span class="tp__sw" data-theme={t.id} aria-hidden="true">
+                    <span style="background:var(--bg)" />
+                    <span style="background:var(--inverse-bg)" />
+                    <span style="background:var(--accent)" />
+                    <span style="background:var(--tint)" />
+                  </span>
+                  <span class="tp__txt">
+                    <span class="tp__name" data-theme={t.id} style="font-style:var(--heading-style)">{t.name}</span>
+                    <span class="tp__note">{t.note}</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      ))
+    }
     <button type="button" class="tp__copy" data-copy-theme>Copy link to this theme</button>
   </div>
 </div>
@@ -95,6 +109,11 @@ export const themes = [
     text-transform: uppercase;
     color: #777;
     margin: 0.25rem 0.4rem 0.6rem;
+  }
+  .tp__list + .tp__head {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid #eee;
   }
   .tp__list {
     list-style: none;

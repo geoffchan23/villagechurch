@@ -197,7 +197,8 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     position: relative;
     padding-block: 6rem clamp(3rem, 8vw, 5rem);
   }
-  .hero h1 {
+  /* Global (lower specificity) so theme overrides can resize the headline. */
+  :global(.hero h1) {
     color: var(--hero-fg);
     font-size: clamp(2.8rem, 8vw, 5.5rem);
     max-width: 14ch;

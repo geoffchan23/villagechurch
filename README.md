@@ -42,6 +42,11 @@ overrides (hero treatment, cards, nav). A floating **Theme** button lets reviewe
 `?theme=editorial` links straight to one. To pick a final theme, make it the `:root` default
 and set `showThemePicker = false` in `src/data/site.ts`.
 
+Five experimental themes live in `src/styles/wild.css` — Watercolour, Swiss Grid, Aurora, Riso Zine
+and Desktop 98. They re-lay the page (painted illustration hero, bento tiles, windows, a scrolling
+banner) using CSS only, so content and SEO are identical. Their art is in `src/assets/fx/`
+(hand-written SVG with paint/grain filters).
+
 ## SEO & AI assistants
 
 - Per-page titles, descriptions, canonical URLs, Open Graph/Twitter cards

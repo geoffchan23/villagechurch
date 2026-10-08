@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <filter id="p" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="4" seed="7" result="n1"/>
+      <feDisplacementMap in="SourceGraphic" in2="n1" scale="34" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="3" result="n2"/>
+      <feColorMatrix in="n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0 0 0 0.3" result="mottle"/>
+      <feComposite in="d" in2="mottle" operator="in" result="tex"/>
+      <feGaussianBlur in="d" stdDeviation="5" result="b"/>
+      <feComposite in="d" in2="b" operator="out" result="edge"/>
+      <feMerge><feMergeNode in="tex"/><feMergeNode in="edge"/><feMergeNode in="edge"/></feMerge>
+    </filter>
+    <filter id="q" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="19" result="n1"/>
+      <feDisplacementMap in="SourceGraphic" in2="n1" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="5" result="n2"/>
+      <feColorMatrix in="n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.8 0 0 0 0.4" result="mottle"/>
+      <feComposite in="d" in2="mottle" operator="in" result="tex"/>
+      <feGaussianBlur in="d" stdDeviation="2.5" result="b"/>
+      <feComposite in="d" in2="b" operator="out" result="edge"/>
+      <feMerge><feMergeNode in="tex"/><feMergeNode in="edge"/><feMergeNode in="edge"/></feMerge>
+    </filter>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <g style="mix-blend-mode:multiply">
+    <!-- sky wash and sun -->
+    <g filter="url(#soft)" opacity="0.55">
+      <ellipse cx="1180" cy="190" rx="560" ry="170" fill="#bcd7e6"/>
+      <ellipse cx="320" cy="140" rx="420" ry="120" fill="#d7e6ee"/>
+    </g>
+    <g filter="url(#p)">
+      <circle cx="1210" cy="210" r="88" fill="#f4c95d" opacity="0.8"/>
+    </g>
+    <!-- far hills -->
+    <g filter="url(#p)" opacity="0.75">
+      <path d="M0 470 C 180 360 330 350 500 420 S 820 330 1000 380 S 1380 300 1600 400 L1600 830 L0 830Z" fill="#b8cfc4"/>
+    </g>
+    <g filter="url(#p)" opacity="0.8">
+      <path d="M0 540 C 220 450 420 470 640 520 S 1050 430 1250 470 S 1500 470 1600 450 L1600 830 L0 830Z" fill="#7fa39c"/>
+    </g>
+    <!-- pines behind the cabin -->
+    <g filter="url(#q)" fill="#3f6b4f" opacity="0.85">
+      <path d="M980 520 L1020 380 L1060 520Z"/>
+      <path d="M1040 530 L1090 330 L1140 530Z"/>
+      <path d="M1130 520 L1165 410 L1200 520Z"/>
+      <path d="M300 560 L345 400 L390 560Z"/>
+      <path d="M370 570 L410 450 L450 570Z"/>
+      <path d="M1420 520 L1460 380 L1500 520Z"/>
+    </g>
+    <!-- cabin -->
+    <g filter="url(#q)">
+      <rect x="760" y="455" width="230" height="140" fill="#a8704a" opacity="0.9"/>
+      <path d="M735 470 L875 370 L1015 470Z" fill="#4a2e22" opacity="0.9"/>
+      <rect x="940" y="385" width="26" height="60" fill="#6b4434"/>
+      <rect x="850" y="520" width="44" height="75" fill="#5a3a2a"/>
+      <rect x="790" y="495" width="40" height="36" fill="#f4c95d"/>
+      <rect x="920" y="495" width="40" height="36" fill="#f4c95d"/>
+    </g>
+    <!-- smoke -->
+    <g filter="url(#soft)" fill="#c9c3bd" opacity="0.6">
+      <circle cx="958" cy="350" r="16"/><circle cx="975" cy="315" r="20"/><circle cx="1000" cy="275" r="24"/>
+    </g>
+    <!-- foreground meadow and path -->
+    <g filter="url(#p)" opacity="0.85">
+      <path d="M0 640 C 260 560 520 590 760 600 S 1250 560 1600 600 L1600 830 L0 830Z" fill="#9bbf7a"/>
+    </g>
+    <g filter="url(#q)" opacity="0.7">
+      <path d="M850 598 C 860 650 760 700 640 760 L880 760 C 900 700 920 650 896 598Z" fill="#e8d3ad"/>
+    </g>
+    <!-- flowers -->
+    <g filter="url(#q)" opacity="0.8">
+      <circle cx="220" cy="690" r="14" fill="#e8a0a8"/><circle cx="260" cy="712" r="11" fill="#f4c95d"/>
+      <circle cx="420" cy="700" r="12" fill="#e8a0a8"/><circle cx="1120" cy="690" r="14" fill="#e8a0a8"/>
+      <circle cx="1180" cy="716" r="11" fill="#f4c95d"/><circle cx="1340" cy="696" r="12" fill="#c79bd6"/>
+      <circle cx="560" cy="726" r="11" fill="#c79bd6"/><circle cx="1460" cy="722" r="14" fill="#e8a0a8"/>
+    </g>
+    <!-- birds -->
+    <g fill="none" stroke="#4a2e22" stroke-width="3" stroke-linecap="round" opacity="0.6">
+      <path d="M560 210 q14 -14 28 0 q14 -14 28 0"/>
+      <path d="M640 170 q10 -10 20 0 q10 -10 20 0"/>
+    </g>
+  </g>
+</svg>

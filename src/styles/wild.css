@@ -1,0 +1,1104 @@
+/* ---------------------------------------------------------------------------
+   EXPERIMENTAL THEMES
+   These go beyond palette: they re-lay the hero, turn sections into tiles or
+   windows, and add illustration and texture. Everything is CSS on top of the
+   same markup, so content and SEO are identical across themes.
+   ------------------------------------------------------------------------ */
+
+/* Scrolling banner (markup in Base.astro); off unless a theme enables it. */
+.ticker {
+  display: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker__track {
+  display: inline-flex;
+  animation: ticker 40s linear infinite;
+}
+.ticker__track > span > span::after {
+  content: '✦';
+  margin-inline: 1.25rem;
+}
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =============================== WATERCOLOUR ===============================
+   A painted landscape replaces the hero photo. Photos get deckled edges,
+   buttons are brush strokes, boxes look hand-drawn. */
+[data-theme='watercolour'] {
+  --light: #ffffff;
+  --surface: #ffffff;
+  --dark: #2f4858;
+  --darkest: #1f2f3a;
+  --accent: #e07a5f;
+  --accent-strong: #c25a3f;
+  --tint: #e3eef0;
+  --highlight: #e07a5f;
+  --muted: #5d6b73;
+  --line: #c9d6d6;
+  --bg: #f8faf8;
+  --eyebrow: #c25a3f;
+  --link: #2f6b80;
+  --player-bg: #ffffff;
+  --player-fg: #2f4858;
+  --player-accent: #e07a5f;
+  --hero-fg: #2f4858;
+  --hero-btn-fg: #ffffff;
+  --hero-accent: #c25a3f;
+  --shadow: none;
+  --font-heading: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Lora Variable', Georgia, serif;
+  --heading-weight: 500;
+  --heading-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 96;
+  --heading-tracking: -0.01em;
+  --heading-transform: none;
+  --heading-style: italic;
+  --radius: 6px;
+  --btn-radius: 0;
+  --border-w: 2px;
+  --photo-filter: saturate(0.85) contrast(0.95);
+  --person-radius: 0;
+}
+:root[data-theme='watercolour'] body {
+  background-image: url('../assets/fx/paper.svg');
+}
+:root[data-theme='watercolour'] .site-header {
+  border-bottom: 0;
+}
+:root[data-theme='watercolour'] .hero {
+  background: url('../assets/fx/wc-hero.svg') center bottom / max(100%, 1000px) auto no-repeat;
+  min-height: min(94vh, 54rem);
+  align-items: start;
+}
+:root[data-theme='watercolour'] .hero__img,
+:root[data-theme='watercolour'] .hero__shade {
+  display: none;
+}
+:root[data-theme='watercolour'] .hero__content {
+  padding-block: clamp(2.5rem, 7vw, 5rem) 0;
+}
+:root[data-theme='watercolour'] .hero h1 {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.95;
+  text-shadow: 0 0 30px #fff, 0 0 12px #fff;
+}
+:root[data-theme='watercolour'] .hero__tag,
+:root[data-theme='watercolour'] .eyebrow {
+  font: 600 1.6rem/1 'Caveat Variable', cursive;
+  letter-spacing: 0;
+  text-transform: none;
+  rotate: -2deg;
+  transform-origin: left;
+}
+:root[data-theme='watercolour'] .hero__tag {
+  gap: 0.2rem 1rem;
+}
+:root[data-theme='watercolour'] .hero__lede {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  text-shadow: 0 0 18px #fff, 0 0 6px #fff;
+}
+/* Brush-stroke buttons; outline buttons become a painted underline. */
+:root[data-theme='watercolour'] .btn:not(.btn--ghost),
+:root[data-theme='watercolour'] .play--lg {
+  border: 0;
+  padding: 0.95rem 1.7rem;
+  -webkit-mask: url('../assets/fx/wc-brush.svg') center / 100% 100% no-repeat;
+  mask: url('../assets/fx/wc-brush.svg') center / 100% 100% no-repeat;
+}
+:root[data-theme='watercolour'] .btn:not(.btn--ghost) {
+  background: var(--dark);
+}
+:root[data-theme='watercolour'] .btn:not(.btn--ghost):hover {
+  background: var(--accent-strong);
+  color: #fff;
+}
+:root[data-theme='watercolour'] .btn--ghost,
+:root[data-theme='watercolour'] .hero .btn--ghost,
+:root[data-theme='watercolour'] .latest__actions .btn.btn--ghost {
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0.2rem;
+  color: var(--dark);
+  background: url('../assets/fx/squiggle.svg') left bottom / 100% 8px no-repeat;
+}
+:root[data-theme='watercolour'] .btn--ghost:hover {
+  background-color: transparent;
+  color: var(--accent-strong);
+}
+/* Deckled, bleeding edges on photos. */
+:root[data-theme='watercolour'] .photo,
+:root[data-theme='watercolour'] .person__photo {
+  -webkit-mask: url('../assets/fx/wc-blob.svg') center / 100% 100% no-repeat;
+  mask: url('../assets/fx/wc-blob.svg') center / 100% 100% no-repeat;
+  box-shadow: none;
+  border-radius: 0;
+}
+/* Painted wash behind tinted sections and the feature card. */
+:root[data-theme='watercolour'] .section--sage {
+  background: url('../assets/fx/wc-wash.svg') center / 100% 100% no-repeat;
+}
+:root[data-theme='watercolour'] .section--paper {
+  background: transparent;
+}
+:root[data-theme='watercolour'] .latest__card {
+  --inverse-bg: #ffffff;
+  --inverse-fg: var(--dark);
+  --inverse-accent: var(--accent-strong);
+  color: var(--text);
+  background: url('../assets/fx/wc-wash.svg') center / 100% 100% no-repeat;
+  box-shadow: none;
+}
+/* Hand-drawn boxes: lopsided radii read as a pen outline. */
+:root[data-theme='watercolour'] .card,
+:root[data-theme='watercolour'] .series-card,
+:root[data-theme='watercolour'] .value,
+:root[data-theme='watercolour'] .chips li {
+  background: rgb(255 255 255 / 0.75);
+  border: 2px solid var(--dark);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: none;
+}
+:root[data-theme='watercolour'] .chips li:nth-child(even) {
+  border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+}
+:root[data-theme='watercolour'] .site-footer {
+  -webkit-mask: url('../assets/fx/wc-brush.svg') top / 100% 48px no-repeat, linear-gradient(#000, #000) 0 30px / 100% 100% no-repeat;
+  mask: url('../assets/fx/wc-brush.svg') top / 100% 48px no-repeat, linear-gradient(#000, #000) 0 30px / 100% 100% no-repeat;
+  padding-top: 5rem;
+}
+:root[data-theme='watercolour'] .player {
+  box-shadow: 0 -1px 0 var(--line), 0 -10px 30px rgb(47 72 88 / 0.08);
+}
+
+/* ================================ SWISS GRID ===============================
+   International Typographic Style: a visible column grid, giant grotesk
+   type, numbered sections, one signal red, photos in red duotone. */
+[data-theme='swiss'] {
+  --light: #f2f1ec;
+  --surface: #f2f1ec;
+  --dark: #111111;
+  --darkest: #111111;
+  --accent: #ff3b1f;
+  --accent-strong: #e0260c;
+  --tint: #111111;
+  --highlight: #ff3b1f;
+  --muted: #4a4a4a;
+  --line: #111111;
+  --bg: #f2f1ec;
+  --link: #111111;
+  --eyebrow: #111111;
+  --btn-hover-bg: #ff3b1f;
+  --btn-hover-fg: #111111;
+  --inverse-bg: #ff3b1f;
+  --inverse-fg: #111111;
+  --inverse-accent: #111111;
+  --player-bg: #111111;
+  --player-fg: #f2f1ec;
+  --player-accent: #ff3b1f;
+  --hero-fg: #111111;
+  --hero-btn-fg: #f2f1ec;
+  --hero-accent: #111111;
+  --shadow: none;
+  --font-heading: 'Space Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Space Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --heading-weight: 700;
+  --heading-settings: normal;
+  --heading-tracking: -0.045em;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 0;
+  --btn-radius: 0;
+  --border-w: 2px;
+  --photo-filter: grayscale(1) contrast(1.25);
+  --person-radius: 0;
+}
+/* The column grid, drawn behind everything at the content width. */
+:root[data-theme='swiss'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0 auto 0 50%;
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  translate: -50%;
+  z-index: -1;
+  background: repeating-linear-gradient(90deg, rgb(17 17 17 / 0.07) 0 1px, transparent 1px calc(100% / 12));
+  border-right: 1px solid rgb(17 17 17 / 0.07);
+}
+:root[data-theme='swiss'] h2 {
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  line-height: 0.92;
+}
+:root[data-theme='swiss'] .site-header {
+  background: var(--bg);
+  backdrop-filter: none;
+  border-bottom: 2px solid #111;
+}
+:root[data-theme='swiss'] .brand__name {
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+:root[data-theme='swiss'] .brand__name small,
+:root[data-theme='swiss'] .site-nav a:not(.btn),
+:root[data-theme='swiss'] .eyebrow,
+:root[data-theme='swiss'] .hero__tag,
+:root[data-theme='swiss'] .site-footer__label,
+:root[data-theme='swiss'] .visit__facts dt {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+:root[data-theme='swiss'] .site-nav a:not(.btn) {
+  font-size: 0.85rem;
+}
+:root[data-theme='swiss'] .ticker {
+  display: block;
+  background: #111;
+  color: #f2f1ec;
+  font: 500 0.85rem/2.4 var(--font-mono);
+  text-transform: uppercase;
+}
+/* Hero: type block on red, photo underneath in red/black duotone. */
+:root[data-theme='swiss'] .hero {
+  display: grid;
+  grid-template-areas: 'text' 'img';
+  min-height: 0;
+}
+:root[data-theme='swiss'] .hero__content {
+  grid-area: text;
+  width: 100%;
+  max-width: none;
+  padding: clamp(2rem, 6vw, 4.5rem) max(var(--gutter), (100% - var(--wrap)) / 2);
+  background: var(--accent);
+}
+:root[data-theme='swiss'] .hero__img,
+:root[data-theme='swiss'] .hero__shade {
+  grid-area: img;
+  position: relative;
+  height: clamp(16rem, 48vh, 32rem);
+}
+:root[data-theme='swiss'] .hero__shade {
+  background: var(--accent);
+  mix-blend-mode: multiply;
+}
+:root[data-theme='swiss'] .hero h1 {
+  font-size: clamp(3.4rem, 13.5vw, 11.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.06em;
+  max-width: none;
+  margin-bottom: 0.4em;
+}
+:root[data-theme='swiss'] .hero__lede {
+  max-width: 34rem;
+  font-weight: 500;
+}
+/* Numbered sections. */
+:root[data-theme='swiss'] main {
+  counter-reset: sec;
+}
+:root[data-theme='swiss'] .section {
+  counter-increment: sec;
+  border-top: 2px solid #111;
+}
+:root[data-theme='swiss'] .section .eyebrow::before {
+  content: counter(sec, decimal-leading-zero) ' / ';
+  color: var(--accent);
+}
+:root[data-theme='swiss'] .latest__card .eyebrow::before {
+  color: #fff;
+}
+:root[data-theme='swiss'] .section .eyebrow {
+  font-size: 0.85rem;
+}
+/* Tinted sections invert to black. */
+:root[data-theme='swiss'] .section--sage {
+  --heading: #f2f1ec;
+  --text: #e6e5df;
+  --muted: #b5b5b0;
+  --link: #ff3b1f;
+  --eyebrow: #f2f1ec;
+  --surface: #1e1e1e;
+  --line: #f2f1ec;
+  --btn-bg: #f2f1ec;
+  --btn-fg: #111;
+  background: #111;
+  color: var(--text);
+}
+:root[data-theme='swiss'] .btn {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  padding: 0.95rem 1.3rem;
+}
+:root[data-theme='swiss'] .btn:hover {
+  transform: none;
+}
+:root[data-theme='swiss'] .latest__card {
+  background-image: none;
+}
+:root[data-theme='swiss'] .latest__card h2 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+}
+:root[data-theme='swiss'] .card,
+:root[data-theme='swiss'] .series-card,
+:root[data-theme='swiss'] .chips li,
+:root[data-theme='swiss'] .value {
+  border: 2px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+:root[data-theme='swiss'] .photo {
+  box-shadow: none;
+}
+:root[data-theme='swiss'] .site-footer {
+  border-top: 2px solid #111;
+}
+
+/* ================================== AURORA =================================
+   Dark, drifting colour fields behind frosted-glass tiles. Each section
+   breaks into separate bento tiles; the header floats as a glass pill. */
+[data-theme='aurora'] {
+  --light: #f4f2ff;
+  --surface: rgb(255 255 255 / 0.06);
+  --dark: #f4f2ff;
+  --darkest: #e6e3f5;
+  --accent: #a78bfa;
+  --accent-strong: #c4b5fd;
+  --tint: #22d3ee;
+  --highlight: #f0abfc;
+  --muted: #a6a3bd;
+  --line: rgb(255 255 255 / 0.12);
+  --bg: #07061a;
+  --text: #dcd9ee;
+  --heading: #ffffff;
+  --link: #c4b5fd;
+  --eyebrow: #c4b5fd;
+  --btn-bg: #ffffff;
+  --btn-fg: #07061a;
+  --btn-hover-bg: #e9e3ff;
+  --btn-hover-fg: #07061a;
+  --inverse-bg: #1a1640;
+  --inverse-fg: #ffffff;
+  --inverse-accent: #f0abfc;
+  --header-bg: rgb(20 18 50 / 0.55);
+  --player-bg: rgb(20 18 50 / 0.8);
+  --player-fg: #ffffff;
+  --player-accent: #a78bfa;
+  --hero-fg: #ffffff;
+  --hero-btn-fg: #07061a;
+  --hero-accent: #c4b5fd;
+  --hero-overlay: linear-gradient(180deg, rgb(7 6 26 / 0.15), rgb(7 6 26 / 0.85)), linear-gradient(120deg, rgb(124 58 237 / 0.35), rgb(6 182 212 / 0.2));
+  --shadow: 0 20px 60px -20px rgb(0 0 0 / 0.6);
+  --font-heading: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --heading-weight: 400;
+  --heading-settings: normal;
+  --heading-tracking: -0.01em;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 22px;
+  --btn-radius: 999px;
+  --border-w: 1px;
+  --photo-filter: saturate(0.9);
+  --person-radius: 18px;
+  --glass: rgb(255 255 255 / 0.055);
+  --glass-line: rgb(255 255 255 / 0.11);
+}
+:root[data-theme='aurora'] body::before {
+  content: '';
+  position: fixed;
+  inset: -20vmax;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 25% 30%, rgb(124 58 237 / 0.55), transparent 28%),
+    radial-gradient(circle at 75% 20%, rgb(6 182 212 / 0.4), transparent 26%),
+    radial-gradient(circle at 60% 75%, rgb(236 72 153 / 0.35), transparent 30%),
+    radial-gradient(circle at 15% 85%, rgb(34 197 94 / 0.22), transparent 25%);
+  filter: blur(40px);
+  animation: aurora 26s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  50% {
+    transform: translate(4vmax, -3vmax) rotate(8deg) scale(1.05);
+  }
+  100% {
+    transform: translate(-3vmax, 4vmax) rotate(-6deg);
+  }
+}
+:root[data-theme='aurora'] h1,
+:root[data-theme='aurora'] h2 {
+  line-height: 1;
+}
+:root[data-theme='aurora'] h2 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+}
+/* Floating glass header. */
+:root[data-theme='aurora'] .site-header {
+  top: 0.75rem;
+  margin: 0.75rem auto 0;
+  width: min(100% - 1.5rem, 76rem);
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+:root[data-theme='aurora'] .site-header__inner {
+  width: auto;
+  padding-inline: 0.75rem 1rem;
+  min-height: 4rem;
+}
+:root[data-theme='aurora'] .brand__logo {
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+}
+:root[data-theme='aurora'] .site-nav a:not(.btn) {
+  border-bottom: 0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+}
+:root[data-theme='aurora'] .site-nav a:not(.btn):hover,
+:root[data-theme='aurora'] .site-nav a[aria-current='page'] {
+  background: var(--glass);
+}
+@media (max-width: 760px) {
+  :root[data-theme='aurora'] .site-header {
+    border-radius: 28px;
+  }
+  :root[data-theme='aurora'] .site-nav {
+    background: rgb(20 18 50 / 0.95);
+    border-radius: 0 0 28px 28px;
+    border: 0;
+  }
+}
+/* Hero becomes a rounded tile with gradient type. */
+:root[data-theme='aurora'] .hero {
+  margin: 0.75rem;
+  border-radius: 32px;
+  border: 1px solid var(--glass-line);
+  min-height: min(84vh, 44rem);
+}
+:root[data-theme='aurora'] .hero h1 {
+  font-size: clamp(3.4rem, 10vw, 7.5rem);
+  line-height: 0.92;
+  font-style: italic;
+  background: linear-gradient(100deg, #fff 20%, #c4b5fd 55%, #67e8f9 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.08em;
+}
+:root[data-theme='aurora'] .hero__tag span,
+:root[data-theme='aurora'] .eyebrow {
+  display: inline-block;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+:root[data-theme='aurora'] .hero__tag {
+  gap: 0.5rem;
+}
+:root[data-theme='aurora'] .hero__ghost {
+  backdrop-filter: blur(10px);
+  background: var(--glass);
+}
+/* Bento: sections lose their bands and their contents become tiles. */
+:root[data-theme='aurora'] .section,
+:root[data-theme='aurora'] .page-head {
+  background: transparent;
+  padding-block: 0.6rem;
+}
+:root[data-theme='aurora'] main > :last-child {
+  padding-bottom: 3rem;
+}
+:root[data-theme='aurora'] .section > .wrap:not(.grid):not(.latest),
+:root[data-theme='aurora'] .section > .narrow,
+:root[data-theme='aurora'] .page-head > *,
+:root[data-theme='aurora'] .section > .grid > *,
+:root[data-theme='aurora'] .latest > *,
+:root[data-theme='aurora'] .card,
+:root[data-theme='aurora'] .series-card,
+:root[data-theme='aurora'] .value,
+:root[data-theme='aurora'] .library,
+:root[data-theme='aurora'] .sermon {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 28px;
+  backdrop-filter: blur(24px) saturate(1.3);
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+}
+:root[data-theme='aurora'] .section > .grid,
+:root[data-theme='aurora'] .latest {
+  gap: 1.2rem;
+  align-items: stretch;
+}
+/* Photo tiles: picture fills the tile edge to edge. */
+:root[data-theme='aurora'] .section > .grid > img.photo {
+  padding: 0;
+  height: 100%;
+  min-height: 18rem;
+  border-radius: 28px;
+}
+:root[data-theme='aurora'] .visit__media {
+  padding: 0.75rem !important;
+}
+:root[data-theme='aurora'] .visit__media .photo,
+:root[data-theme='aurora'] .visit__map {
+  border-radius: 20px;
+}
+:root[data-theme='aurora'] .visit__map {
+  filter: invert(0.9) hue-rotate(200deg) saturate(0.7);
+}
+:root[data-theme='aurora'] .latest__card {
+  background: linear-gradient(140deg, rgb(124 58 237 / 0.45), rgb(6 182 212 / 0.2)), var(--glass);
+}
+:root[data-theme='aurora'] .chips li {
+  background: var(--glass);
+  border-color: var(--glass-line);
+}
+:root[data-theme='aurora'] .grid-team .person {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 24px;
+  padding: 0.75rem 0.75rem 1.25rem;
+}
+:root[data-theme='aurora'] .grid-team .person > :not(img) {
+  padding-inline: 0.5rem;
+}
+:root[data-theme='aurora'] .site-footer {
+  background: transparent;
+  border-top: 1px solid var(--glass-line);
+}
+/* Floating glass player. */
+:root[data-theme='aurora'] .player {
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(24px) saturate(1.4);
+}
+
+/* ================================ RISO ZINE ================================
+   A photocopied, risograph-printed church zine: yellow paper, blue and pink
+   inks slightly out of register, halftone photos, taped-on cards. */
+[data-theme='zine'] {
+  --light: #fff7cc;
+  --surface: #fffdf0;
+  --dark: #1d3fbb;
+  --darkest: #142d87;
+  --accent: #ff48b0;
+  --accent-strong: #d81b85;
+  --tint: #1d3fbb;
+  --highlight: #ff48b0;
+  --muted: #2b46a8;
+  --line: #1d3fbb;
+  --bg: #ffe14d;
+  --text: #142d87;
+  --heading: #1d3fbb;
+  --link: #d81b85;
+  --eyebrow: #1d3fbb;
+  --btn-bg: #1d3fbb;
+  --btn-fg: #ffe14d;
+  --btn-hover-bg: #ff48b0;
+  --btn-hover-fg: #142d87;
+  --inverse-bg: #ff48b0;
+  --inverse-fg: #142d87;
+  --inverse-accent: #142d87;
+  --header-bg: #ffe14d;
+  --player-bg: #ff48b0;
+  --player-fg: #142d87;
+  --player-accent: #1d3fbb;
+  --hero-fg: #1d3fbb;
+  --hero-btn-fg: #ffe14d;
+  --hero-accent: #142d87;
+  --shadow: 6px 6px 0 #ff48b0;
+  --font-heading: 'Archivo Black', Impact, sans-serif;
+  --font-body: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --heading-weight: 400;
+  --heading-settings: normal;
+  --heading-tracking: -0.01em;
+  --heading-transform: uppercase;
+  --heading-style: normal;
+  --radius: 0;
+  --btn-radius: 0;
+  --border-w: 2px;
+  --photo-filter: grayscale(1) contrast(1.35) brightness(1.05);
+  --person-radius: 0;
+}
+/* Print grain over the whole page. */
+:root[data-theme='zine'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  background: url('../assets/fx/grain.svg');
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+/* Misregistered second ink on headings. */
+:root[data-theme='zine'] h1,
+:root[data-theme='zine'] h2 {
+  text-shadow: 3px 3px 0 #ff48b0;
+  line-height: 0.98;
+}
+:root[data-theme='zine'] .site-header {
+  border-bottom: 3px solid var(--dark);
+  backdrop-filter: none;
+}
+:root[data-theme='zine'] .brand__logo {
+  filter: grayscale(1) contrast(1.4);
+  mix-blend-mode: multiply;
+}
+:root[data-theme='zine'] .site-nav a:not(.btn),
+:root[data-theme='zine'] .eyebrow,
+:root[data-theme='zine'] .hero__tag,
+:root[data-theme='zine'] .site-footer__label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+:root[data-theme='zine'] .eyebrow {
+  display: inline-block;
+  background: var(--dark);
+  color: var(--bg);
+  padding: 0.35rem 0.6rem;
+  rotate: -2deg;
+}
+:root[data-theme='zine'] .ticker {
+  display: block;
+  background: var(--accent);
+  color: var(--darkest);
+  font: 700 1rem/2.6 var(--font-mono);
+  text-transform: uppercase;
+  border-block: 3px solid var(--dark);
+  rotate: -1.2deg;
+  margin: 0.8rem -1rem 0.4rem;
+  position: relative;
+  z-index: 2;
+}
+/* Hero: halftone duotone photo with cut-out headline labels. */
+:root[data-theme='zine'] .hero {
+  background: var(--accent);
+  min-height: min(86vh, 44rem);
+  overflow: hidden;
+}
+:root[data-theme='zine'] .hero__img {
+  mix-blend-mode: multiply;
+}
+:root[data-theme='zine'] .hero__shade {
+  background: radial-gradient(circle, #1d3fbb 28%, transparent 30%) 0 0 / 7px 7px;
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+:root[data-theme='zine'] .hero h1 {
+  display: inline-block;
+  background: var(--bg);
+  padding: 0.12em 0.25em;
+  rotate: -2.5deg;
+  font-size: clamp(2.8rem, 9vw, 6.5rem);
+  max-width: none;
+}
+:root[data-theme='zine'] .hero__tag span {
+  background: var(--surface);
+  padding: 0.2rem 0.5rem;
+}
+:root[data-theme='zine'] .hero__lede {
+  display: inline-block;
+  background: var(--surface);
+  color: var(--darkest);
+  padding: 0.6rem 0.9rem;
+  rotate: 1deg;
+  opacity: 1;
+}
+:root[data-theme='zine'] .hero__ghost {
+  background: var(--surface);
+  border-color: var(--dark);
+  color: var(--dark);
+}
+:root[data-theme='zine'] .btn,
+:root[data-theme='zine'] .play {
+  box-shadow: 4px 4px 0 var(--accent);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+:root[data-theme='zine'] .btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--dark);
+}
+:root[data-theme='zine'] .photo,
+:root[data-theme='zine'] .person__photo {
+  mix-blend-mode: multiply;
+  box-shadow: none;
+  outline: 3px solid var(--dark);
+}
+:root[data-theme='zine'] .photo {
+  rotate: 1.5deg;
+}
+:root[data-theme='zine'] .section--paper {
+  background: transparent;
+}
+/* Tinted sections print in blue ink. */
+:root[data-theme='zine'] .section--sage {
+  --heading: #ffe14d;
+  --text: #fff7cc;
+  --muted: #fff7cc;
+  --link: #ffe14d;
+  --eyebrow: #ffe14d;
+  --surface: #ffe14d;
+  --btn-bg: #ffe14d;
+  --btn-fg: #1d3fbb;
+  background: var(--dark);
+  color: var(--text);
+}
+:root[data-theme='zine'] .section--sage .eyebrow {
+  background: var(--accent);
+  color: var(--darkest);
+}
+:root[data-theme='zine'] .section--sage .chips li {
+  color: var(--darkest);
+}
+/* Taped-on cards, each at its own tilt. */
+:root[data-theme='zine'] .card,
+:root[data-theme='zine'] .series-card,
+:root[data-theme='zine'] .value,
+:root[data-theme='zine'] .latest__card,
+:root[data-theme='zine'] .person {
+  position: relative;
+  background: var(--surface);
+  border: 2px solid var(--dark);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 var(--accent);
+  rotate: -1deg;
+}
+:root[data-theme='zine'] .person {
+  padding: 0.9rem;
+}
+:root[data-theme='zine'] .card:nth-child(even),
+:root[data-theme='zine'] .series-card:nth-child(even),
+:root[data-theme='zine'] .value:nth-child(even),
+:root[data-theme='zine'] .person:nth-child(even) {
+  rotate: 1.2deg;
+}
+:root[data-theme='zine'] .card::before,
+:root[data-theme='zine'] .value::before,
+:root[data-theme='zine'] .latest__card::before,
+:root[data-theme='zine'] .person::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 96px;
+  height: 26px;
+  translate: -50%;
+  rotate: -4deg;
+  background: rgb(255 255 255 / 0.55);
+  border: 1px solid rgb(29 63 187 / 0.15);
+  z-index: 1;
+}
+:root[data-theme='zine'] .latest__card {
+  background: var(--accent);
+  rotate: 0.8deg;
+  box-shadow: 6px 6px 0 var(--dark);
+}
+:root[data-theme='zine'] .latest__actions .play {
+  box-shadow: 4px 4px 0 var(--bg);
+}
+:root[data-theme='zine'] .chips li {
+  background: var(--accent);
+  color: var(--darkest);
+  border: 2px solid var(--darkest);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+:root[data-theme='zine'] .site-footer {
+  background: var(--dark);
+  --inverse-fg: #ffe14d;
+  --inverse-accent: #ff48b0;
+}
+:root[data-theme='zine'] .player {
+  border-top: 3px solid var(--dark);
+  box-shadow: none;
+}
+
+/* ================================ DESKTOP 98 ===============================
+   A late-90s desktop: teal wallpaper, every section is a bevelled window
+   (its label becomes the title bar), the player is the taskbar. */
+[data-theme='desktop'] {
+  --light: #ffffff;
+  --surface: #c0c0c0;
+  --dark: #000000;
+  --darkest: #000000;
+  --accent: #000080;
+  --accent-strong: #000080;
+  --tint: #c0c0c0;
+  --highlight: #000080;
+  --muted: #222222;
+  --line: #808080;
+  --bg: #008080;
+  --text: #000000;
+  --heading: #000000;
+  --link: #0000ee;
+  --eyebrow: #ffffff;
+  --btn-bg: #c0c0c0;
+  --btn-fg: #000000;
+  --btn-hover-bg: #c0c0c0;
+  --btn-hover-fg: #000000;
+  --inverse-bg: #ffffff;
+  --inverse-fg: #000000;
+  --inverse-accent: #000080;
+  --header-bg: #c0c0c0;
+  --player-bg: #c0c0c0;
+  --player-fg: #000000;
+  --player-accent: #000080;
+  --hero-fg: #000000;
+  --hero-btn-fg: #000000;
+  --hero-accent: #ffffff;
+  --hero-overlay: none;
+  --shadow: none;
+  --font-heading: 'Pixelify Sans Variable', 'Courier New', monospace;
+  --font-body: Tahoma, Verdana, 'Segoe UI', sans-serif;
+  --heading-weight: 600;
+  --heading-settings: normal;
+  --heading-tracking: 0;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 0;
+  --btn-radius: 0;
+  --border-w: 1px;
+  --photo-filter: contrast(1.05);
+  --person-radius: 0;
+  --bevel: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #ffffff;
+  --bevel-in: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  --titlebar: linear-gradient(90deg, #000080, #1084d0);
+}
+:root[data-theme='desktop'] body {
+  font-size: 0.95rem;
+}
+:root[data-theme='desktop'] ::selection {
+  background: #000080;
+  color: #fff;
+}
+:root[data-theme='desktop'] .site-header {
+  background: #c0c0c0;
+  backdrop-filter: none;
+  box-shadow: var(--bevel);
+  border: 0;
+}
+:root[data-theme='desktop'] .brand__name small {
+  color: #000080;
+}
+:root[data-theme='desktop'] .site-nav a:not(.btn) {
+  border-bottom: 0;
+  padding: 0.3rem 0.6rem;
+}
+:root[data-theme='desktop'] .site-nav a:not(.btn):hover,
+:root[data-theme='desktop'] .site-nav a[aria-current='page'] {
+  background: #000080;
+  color: #fff;
+}
+@media (max-width: 760px) {
+  :root[data-theme='desktop'] .site-nav {
+    background: #c0c0c0;
+    box-shadow: var(--bevel);
+  }
+}
+/* Bevelled buttons that press in. */
+:root[data-theme='desktop'] .btn,
+:root[data-theme='desktop'] .play,
+:root[data-theme='desktop'] .hero .btn,
+:root[data-theme='desktop'] .latest__actions .btn.btn--ghost {
+  background: #c0c0c0;
+  color: #000;
+  border: 0;
+  box-shadow: var(--bevel);
+  font: 400 0.95rem var(--font-body);
+  padding: 0.6rem 1.1rem;
+}
+:root[data-theme='desktop'] .btn:hover,
+:root[data-theme='desktop'] .play:hover {
+  transform: none;
+  background: #c0c0c0;
+  color: #000;
+}
+:root[data-theme='desktop'] .btn:active,
+:root[data-theme='desktop'] .play:active {
+  box-shadow: var(--bevel-in);
+}
+/* Windows. */
+:root[data-theme='desktop'] .section,
+:root[data-theme='desktop'] .page-head {
+  background: transparent;
+  padding-block: 1.25rem;
+}
+:root[data-theme='desktop'] main > :first-child:not(.hero) {
+  padding-top: 2rem;
+}
+:root[data-theme='desktop'] main > :last-child {
+  padding-bottom: 3rem;
+}
+:root[data-theme='desktop'] .section > .wrap,
+:root[data-theme='desktop'] .section > .narrow,
+:root[data-theme='desktop'] .page-head > *,
+:root[data-theme='desktop'] .library,
+:root[data-theme='desktop'] .series-strip,
+:root[data-theme='desktop'] .sermon,
+:root[data-theme='desktop'] .hero__content {
+  position: relative;
+  background: #c0c0c0;
+  box-shadow: var(--bevel), 6px 6px 0 rgb(0 0 0 / 0.25);
+  padding: 2.6rem clamp(1rem, 3vw, 1.75rem) clamp(1rem, 3vw, 1.75rem);
+}
+/* Title bar: a generic one on every window… */
+:root[data-theme='desktop'] .section > .wrap::before,
+:root[data-theme='desktop'] .section > .narrow::before,
+:root[data-theme='desktop'] .page-head > *::before,
+:root[data-theme='desktop'] .library::before,
+:root[data-theme='desktop'] .series-strip::before,
+:root[data-theme='desktop'] .sermon::before,
+:root[data-theme='desktop'] .hero__content::before {
+  content: 'Village Church Newcastle';
+  position: absolute;
+  inset: 3px 3px auto 3px;
+  height: 1.6rem;
+  padding: 0 4.6rem 0 0.5rem;
+  background: var(--titlebar);
+  color: #fff;
+  font: 700 0.82rem/1.6rem var(--font-body);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  z-index: 1;
+}
+:root[data-theme='desktop'] .hero__content::before {
+  content: 'Welcome.exe';
+}
+:root[data-theme='desktop'] #visit > .wrap::before {
+  content: 'Plan a visit — Directions';
+}
+:root[data-theme='desktop'] #faq > .narrow::before {
+  content: 'Help Topics';
+}
+/* …plus minimise / maximise / close boxes. */
+:root[data-theme='desktop'] .section > .wrap::after,
+:root[data-theme='desktop'] .section > .narrow::after,
+:root[data-theme='desktop'] .page-head > *::after,
+:root[data-theme='desktop'] .library::after,
+:root[data-theme='desktop'] .series-strip::after,
+:root[data-theme='desktop'] .sermon::after,
+:root[data-theme='desktop'] .hero__content::after {
+  content: '_  □  ✕';
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  z-index: 2;
+  height: 1.1rem;
+  padding: 0 0.3rem;
+  background: #c0c0c0;
+  box-shadow: var(--bevel);
+  font: 700 0.7rem/1.1rem var(--font-body);
+  color: #000;
+  white-space: pre;
+}
+/* Section labels become bold menu-style captions. */
+:root[data-theme='desktop'] .eyebrow {
+  color: #000080;
+  letter-spacing: 0.04em;
+  font: 700 0.8rem var(--font-body);
+}
+:root[data-theme='desktop'] .hero {
+  min-height: min(86vh, 44rem);
+  align-items: center;
+}
+:root[data-theme='desktop'] .hero__content {
+  width: min(100% - 2 * var(--gutter), 40rem);
+  margin: 2rem auto 2rem max(var(--gutter), (100% - var(--wrap)) / 2);
+}
+:root[data-theme='desktop'] .hero h1 {
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+}
+:root[data-theme='desktop'] .hero__tag {
+  color: #000080;
+  letter-spacing: 0.06em;
+}
+:root[data-theme='desktop'] .hero__lede {
+  opacity: 1;
+}
+/* Sunken white fields for cards and lists. */
+:root[data-theme='desktop'] .latest__card,
+:root[data-theme='desktop'] .card,
+:root[data-theme='desktop'] .value,
+:root[data-theme='desktop'] .series-card,
+:root[data-theme='desktop'] .faq,
+:root[data-theme='desktop'] .latest__list {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--bevel-in);
+  background-image: none;
+}
+:root[data-theme='desktop'] .faq {
+  padding: 0.25rem 0.9rem;
+}
+:root[data-theme='desktop'] .latest__list {
+  padding: 0.25rem 0.75rem;
+}
+:root[data-theme='desktop'] .photo,
+:root[data-theme='desktop'] .person__photo,
+:root[data-theme='desktop'] .visit__map {
+  box-shadow: none;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0;
+}
+:root[data-theme='desktop'] .chips li {
+  background: #c0c0c0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--bevel);
+}
+:root[data-theme='desktop'] .site-footer {
+  background: #c0c0c0;
+  color: #000;
+  box-shadow: var(--bevel);
+  --inverse-fg: #000;
+  --inverse-accent: #000080;
+}
+:root[data-theme='desktop'] .site-footer a {
+  color: #0000ee;
+}
+/* Player = taskbar. */
+:root[data-theme='desktop'] .player {
+  box-shadow: inset 0 1px #dfdfdf, inset 0 2px #fff;
+}
+:root[data-theme='desktop'] .player__art {
+  border-radius: 0;
+}
+:root[data-theme='desktop'] .player__btn--main {
+  border-radius: 0;
+  box-shadow: var(--bevel);
+  background: #c0c0c0;
+  color: #000;
+}
+:root:root[data-theme='zine'] .latest__card .eyebrow {
+  color: var(--bg);
+}
+:root[data-theme='desktop'] .latest__actions .play {
+  background: #c0c0c0;
+  color: #000;
+  border-radius: 0;
+}
+:root[data-theme='desktop'] .library,
+:root[data-theme='desktop'] .series-strip {
+  --bg: #c0c0c0;
+}

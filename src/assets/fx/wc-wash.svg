@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" preserveAspectRatio="none">
+  <defs>
+    <filter id="p" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="4" seed="21" result="n1"/>
+      <feDisplacementMap in="SourceGraphic" in2="n1" scale="60" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" seed="8" result="n2"/>
+      <feColorMatrix in="n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0 0 0 0.25" result="mottle"/>
+      <feComposite in="d" in2="mottle" operator="in" result="tex"/>
+      <feGaussianBlur in="d" stdDeviation="8" result="b"/>
+      <feComposite in="d" in2="b" operator="out" result="edge"/>
+      <feMerge><feMergeNode in="tex"/><feMergeNode in="edge"/><feMergeNode in="edge"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#p)" style="mix-blend-mode:multiply">
+    <path d="M60 60 C 400 0 1200 20 1540 70 L 1560 540 C 1100 600 500 590 40 530Z" fill="#cfe0d8" opacity="0.8"/>
+    <ellipse cx="1300" cy="160" rx="260" ry="120" fill="#f2d4d4" opacity="0.6"/>
+    <ellipse cx="260" cy="460" rx="240" ry="110" fill="#f6e3b4" opacity="0.6"/>
+  </g>
+</svg>
