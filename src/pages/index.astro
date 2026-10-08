@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import { Image } from 'astro:assets';
 import PlayButton from '../components/PlayButton.astro';
 import SermonRow from '../components/SermonRow.astro';
-import { church, sunday, midweek, team, care } from '../data/site';
+import { church, sunday, midweek, team, care, faq } from '../data/site';
 import { sermons, sermonHref, prettyDate, minutes } from '../lib/sermons';
 import gathering from '../assets/gathering.jpg';
 import worship from '../assets/worship.jpg';
@@ -17,7 +17,13 @@ const [latest, ...recent] = sermons;
 const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.city}`);
 ---
 
-<Base>
+<Base
+  markdown="/index.md"
+  schema={[{
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }]}
+>
   <section class="hero">
     <Image src={gathering} alt="The Village Church gathering for Sunday worship in the school gym" class="hero__img" widths={[800, 1400, 2200]} sizes="100vw" loading="eager" />
     <div class="hero__shade"></div>
@@ -135,7 +141,24 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     </div>
   </section>
 
-  <section class="section care">
+  <section class="section" id="faq">
+    <div class="narrow">
+      <span class="eyebrow">Questions</span>
+      <h2>Good to know</h2>
+      <div class="faq">
+        {
+          faq.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper care">
     <div class="narrow">
       <span class="eyebrow">Pastoral care</span>
       <h2>Need someone to talk to?</h2>
@@ -154,7 +177,7 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     min-height: min(88vh, 46rem);
     display: grid;
     align-items: end;
-    color: var(--light);
+    color: var(--hero-fg);
     overflow: hidden;
   }
   .hero__img {
@@ -163,18 +186,19 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: var(--photo-filter);
   }
   .hero__shade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--darkest) 15%, transparent) 0%, color-mix(in srgb, var(--darkest) 55%, transparent) 45%, color-mix(in srgb, var(--darkest) 88%, transparent) 100%);
+    background: var(--hero-overlay);
   }
   .hero__content {
     position: relative;
     padding-block: 6rem clamp(3rem, 8vw, 5rem);
   }
   .hero h1 {
-    color: var(--light);
+    color: var(--hero-fg);
     font-size: clamp(2.8rem, 8vw, 5.5rem);
     max-width: 14ch;
   }
@@ -185,7 +209,7 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     font: 600 0.8rem var(--font-body);
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--tint);
+    color: var(--hero-accent);
   }
   .hero__lede {
     font-size: clamp(1.1rem, 2vw, 1.3rem);
@@ -199,12 +223,12 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     margin-top: 1.75rem;
   }
   .hero__ghost {
-    color: var(--light);
-    border-color: color-mix(in srgb, var(--light) 60%, transparent);
+    color: var(--hero-fg);
+    border-color: color-mix(in srgb, var(--hero-fg) 60%, transparent);
   }
   .hero__ghost:hover {
-    background: color-mix(in srgb, var(--light) 12%, transparent);
-    border-color: var(--light);
+    background: color-mix(in srgb, var(--hero-fg) 12%, transparent);
+    border-color: var(--hero-fg);
   }
 
   .latest {
@@ -214,17 +238,18 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     align-items: start;
   }
   .latest__card {
-    background: var(--dark);
-    color: var(--light);
+    box-shadow: var(--shadow);
+    background: var(--inverse-bg);
+    color: var(--inverse-fg);
     border-radius: calc(var(--radius) * 1.5);
     padding: clamp(1.5rem, 4vw, 2.75rem);
-    background-image: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 55%);
+    background-image: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--inverse-accent) 35%, transparent), transparent 55%);
   }
   .latest__card .eyebrow {
-    color: var(--accent);
+    color: var(--inverse-accent);
   }
   .latest__card h2 a {
-    color: var(--light);
+    color: var(--inverse-fg);
     text-decoration: none;
   }
   .latest__card h2 a:hover {
@@ -241,20 +266,20 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     margin-top: 1.5rem;
   }
   .latest__actions :global(.play) {
-    background: var(--light);
-    color: var(--dark);
+    background: var(--inverse-fg);
+    color: var(--inverse-bg);
   }
   .latest__actions :global(.play[data-playing='true']) {
-    background: var(--accent);
-    color: var(--darkest);
+    background: var(--inverse-accent);
+    color: var(--inverse-bg);
   }
   .latest__actions .btn--ghost {
-    color: var(--light);
-    border-color: color-mix(in srgb, var(--light) 50%, transparent);
+    color: var(--inverse-fg);
+    border-color: color-mix(in srgb, var(--inverse-fg) 50%, transparent);
   }
   .latest__resume {
     font-size: 0.9rem;
-    color: var(--accent);
+    color: var(--inverse-accent);
     font-weight: 600;
   }
   .latest__list {
@@ -275,7 +300,7 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     font: 600 0.75rem var(--font-body);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--accent-strong);
+    color: var(--link);
   }
   .visit__facts dd {
     margin: 0.2rem 0 0;
@@ -308,7 +333,7 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
   }
   .chips li {
     background: var(--surface);
-    border: 1px solid var(--line);
+    border: var(--border-w) solid var(--line);
     border-radius: 999px;
     padding: 0.35rem 0.9rem;
     font-size: 0.92rem;
@@ -323,14 +348,15 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 50% 50% var(--radius) var(--radius);
+    border-radius: var(--person-radius);
+    filter: var(--photo-filter);
     margin-bottom: 1rem;
   }
   .person h3 {
     margin-bottom: 0;
   }
   .person__role {
-    color: var(--accent-strong);
+    color: var(--link);
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 0.6rem;
@@ -344,6 +370,40 @@ const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.
     font-weight: 600;
   }
 
+  .faq {
+    margin-top: 1.5rem;
+    border-top: var(--border-w) solid var(--line);
+  }
+  .faq details {
+    border-bottom: var(--border-w) solid var(--line);
+  }
+  .faq summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    font: var(--heading-weight) 1.15rem/1.35 var(--font-heading);
+    font-style: var(--heading-style);
+    color: var(--heading);
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary::after {
+    content: '+';
+    font: 400 1.5rem/1 var(--font-body);
+    color: var(--accent-strong);
+    transition: rotate 0.2s;
+  }
+  .faq details[open] summary::after {
+    rotate: 45deg;
+  }
+  .faq p {
+    color: var(--muted);
+    padding-bottom: 0.5rem;
+  }
   .care {
     text-align: center;
   }

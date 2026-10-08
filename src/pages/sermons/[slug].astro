@@ -1,5 +1,6 @@
 ---
 import { u } from '../../lib/url';
+import { abs, isoDuration } from '../../lib/schema';
 import Base from '../../layouts/Base.astro';
 import PlayButton from '../../components/PlayButton.astro';
 import SermonRow from '../../components/SermonRow.astro';
@@ -20,20 +21,54 @@ interface Props {
 const { sermon: s, newer, older } = Astro.props;
 const related = s.series ? sermons.filter((x) => x.series === s.series && x.id !== s.id).slice(0, 5) : [];
 const bibleLink = (p: string) => `https://www.biblegateway.com/passage/?search=${encodeURIComponent(p)}&version=NIV`;
-const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series && `${s.series} series`, s.passages.join('; ')]
-  .filter(Boolean)
-  .join(' · ');
+const summary = [s.speaker, prettyDate(s.date), s.series && `${s.series} series`, s.passages.join('; ')].filter(Boolean).join(' · ');
+const description = `“${s.title}” — a sermon${s.speaker ? ` by ${s.speaker}` : ''} at Village Church Newcastle${s.passages.length ? ` on ${s.passages.join('; ')}` : ''}${s.series ? `, part of the ${s.series} series` : ''}. Preached ${prettyDate(s.date)}. Listen or watch online.`;
+const site = Astro.site!;
+const pageUrl = abs(sermonHref(s), site);
+const episode = {
+  '@type': 'PodcastEpisode',
+  '@id': `${pageUrl}#episode`,
+  name: s.title,
+  url: pageUrl,
+  description,
+  datePublished: s.date,
+  inLanguage: 'en',
+  ...(s.audio && { timeRequired: isoDuration(s.audio.duration) }),
+  author: s.speaker ? { '@type': 'Person', name: s.speaker } : { '@id': abs('/#church', site) },
+  publisher: { '@id': abs('/#church', site) },
+  partOfSeries: { '@type': 'PodcastSeries', name: 'Village Church Newcastle Sermons', url: abs('/sermons/', site), webFeed: abs('/podcast.xml', site) },
+  ...(s.passages.length && { about: s.passages.map((p) => ({ '@type': 'CreativeWork', name: p, genre: 'Bible passage' })) }),
+  ...(s.topics.length && { keywords: s.topics.join(', ') }),
+  ...(s.audio && {
+    associatedMedia: { '@type': 'AudioObject', contentUrl: s.audio.url, encodingFormat: 'audio/mpeg', duration: isoDuration(s.audio.duration) },
+  }),
+  ...(s.video && {
+    video: {
+      '@type': 'VideoObject',
+      name: s.title,
+      description,
+      uploadDate: s.date,
+      contentUrl: s.video.url,
+      ...(s.video.poster && { thumbnailUrl: s.video.poster }),
+      ...(s.audio && { duration: isoDuration(s.audio.duration) }),
+    },
+  }),
+};
 ---
 
-<Base title={s.title} description={`Sermon from Village Church Newcastle — ${description}`} image={s.video?.poster ?? undefined}>
-  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'PodcastEpisode',
-    name: s.title,
-    datePublished: s.date,
-    author: s.speaker ? { '@type': 'Person', name: s.speaker } : undefined,
-    associatedMedia: s.audio ? { '@type': 'MediaObject', contentUrl: s.audio.url } : undefined,
-  })} />
+<Base
+  title={s.title}
+  description={description}
+  image={s.video?.poster ?? undefined}
+  ogType="article"
+  markdown={`/sermons/${s.slug}.md`}
+  breadcrumbs={[
+    { name: 'Sermons', path: '/sermons/' },
+    ...(s.series ? [{ name: s.series, path: `/sermons/series/${slugify(s.series)}/` }] : []),
+    { name: s.title, path: sermonHref(s) },
+  ]}
+  schema={[episode]}
+>
 
   <article class="wrap sermon" data-autoload data-play={playPayload(s)}>
     <nav class="crumbs" aria-label="Breadcrumb">
@@ -44,6 +79,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
     <header class="sermon__head">
       <p class="eyebrow">{prettyDate(s.date)}</p>
       <h1>{s.title}</h1>
+      <p class="sermon__summary">{description.replace(' Listen or watch online.', '')}</p>
       <p class="sermon__meta">
         {s.speaker && <span>{s.speaker}</span>}
         {s.audio && <span>{minutes(s.audio.duration)}</span>}
@@ -147,10 +183,15 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
   }
   .sermon__head {
     padding-block: clamp(2rem, 5vw, 3.5rem) 2rem;
-    border-bottom: 1px solid var(--line);
+    border-bottom: var(--border-w) solid var(--line);
   }
   .sermon__head h1 {
     max-width: 22ch;
+  }
+  .sermon__summary {
+    max-width: 44rem;
+    color: var(--muted);
+    font-size: 1.05rem;
   }
   .sermon__meta {
     display: flex;
@@ -236,13 +277,13 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
     gap: 1rem;
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--line);
+    border-top: var(--border-w) solid var(--line);
   }
   .pager a {
     display: grid;
     max-width: 45%;
     font: var(--heading-weight) 1.05rem/1.3 var(--font-heading);
-    color: var(--dark);
+    color: var(--heading);
     text-decoration: none;
   }
   .pager small {

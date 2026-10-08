@@ -3,11 +3,12 @@
 // Swatches render with the real theme tokens (each one carries its own
 // data-theme), so adding a theme is just a new block in global.css plus a line here.
 export const themes = [
-  { id: 'cabin', name: 'Cabin', note: 'From the logo — cream, cabin brown, sage' },
-  { id: 'woodland', name: 'Woodland', note: 'Forest green and brass, classic serif' },
-  { id: 'lakeshore', name: 'Lakeshore', note: 'Lake blues and sand, calm and airy' },
-  { id: 'modern', name: 'Modern', note: 'Crisp black and white, bold sans' },
-  { id: 'harvest', name: 'Harvest', note: 'Terracotta, olive and mustard, warm' },
+  { id: 'cabin', name: 'Cabin', note: 'From the logo — warm cream, brown and sage' },
+  { id: 'midnight', name: 'Midnight', note: 'Full dark mode, candlelight gold, airy type' },
+  { id: 'editorial', name: 'Editorial', note: 'Magazine style — ink, newsprint, one red' },
+  { id: 'sunrise', name: 'Sunrise', note: 'Vibrant coral-to-violet, chunky and playful' },
+  { id: 'block', name: 'Block', note: 'Bold poster style — outlines and hard shadows' },
+  { id: 'meadow', name: 'Meadow', note: 'Soft and light — pale greens, blush, italics' },
 ];
 ---
 
@@ -24,13 +25,13 @@ export const themes = [
           <li>
             <button type="button" class="tp__opt" data-set-theme={t.id} aria-pressed="false">
               <span class="tp__sw" data-theme={t.id} aria-hidden="true">
-                <span style="background:var(--light)" />
-                <span style="background:var(--dark)" />
+                <span style="background:var(--bg)" />
+                <span style="background:var(--inverse-bg)" />
                 <span style="background:var(--accent)" />
                 <span style="background:var(--tint)" />
               </span>
               <span class="tp__txt">
-                <span class="tp__name" data-theme={t.id}>{t.name}</span>
+                <span class="tp__name" data-theme={t.id} style="font-style:var(--heading-style)">{t.name}</span>
                 <span class="tp__note">{t.note}</span>
               </span>
             </button>

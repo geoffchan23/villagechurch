@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // SITE_URL/BASE_PATH let the same code run as a preview under a sub-path
 // (e.g. https://geoffreychan.com/villagechurch/) or live at the domain root.
@@ -11,6 +12,12 @@ export default defineConfig({
   base,
   trailingSlash: 'always',
   prefetch: { prefetchAll: true },
+  integrations: [
+    sitemap({
+      // Redirect stubs for old WordPress URLs aren't real pages.
+      filter: (page) => !/\/(about-us|our-beliefs|kids-ministry|resources|events|hello-world)\/$/.test(page),
+    }),
+  ],
   // Keep links from the old WordPress site working.
   redirects: {
     '/about-us': to('/about/'),

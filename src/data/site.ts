@@ -14,7 +14,16 @@ export const church = {
     street: '50 Glass Court',
     city: 'Newcastle, ON L1B 1M5',
     mapUrl: 'https://maps.app.goo.gl/vDihn2ogGaJYsmpB6',
+    // Machine-readable parts for search engines (schema.org PostalAddress).
+    locality: 'Newcastle',
+    region: 'ON',
+    postalCode: 'L1B 1M5',
+    country: 'CA',
   },
+  description:
+    'Village Church Newcastle is a Christ-centred church family in Newcastle, Ontario (Clarington), meeting Sundays at 10:30 am at Newcastle Public School. Ordinary people, authentic faith, family together.',
+  founded: '2021-01',
+  areaServed: ['Newcastle', 'Orono', 'Newtonville', 'Clarington'],
   social: {
     facebook: 'https://www.facebook.com/villagechurchnewcastle/',
     instagram: '', // add the handle URL when there is one
@@ -127,6 +136,26 @@ export const nav = [
   { label: 'Kids', href: '/kids/' },
   { label: 'Sermons', href: '/sermons/' },
   { label: 'Give', href: '/give/' },
+];
+
+// Frequently asked questions — shown on the home page and published as
+// structured data so search engines and AI assistants can answer them directly.
+// Keep answers factual; they're quoted verbatim.
+export const faq = [
+  {
+    q: 'When and where does Village Church Newcastle meet?',
+    a: `Sundays at ${sunday.time} at ${church.address.venue}, ${church.address.street}, ${church.address.city}. Coffee is ready by ${sunday.coffee}.`,
+  },
+  { q: 'What happens at a Sunday service?', a: `${sunday.summary} ${sunday.after}` },
+  { q: 'Is there a program for kids?', a: `${kids.intro} ${kids.safety}` },
+  { q: 'What does Village Church believe?', a: beliefs.join(' ') },
+  {
+    q: 'Is Village Church part of a denomination or network?',
+    a: `Village Church Newcastle is a member of ${partners.network.name}, ${partners.network.note}. We also partner with the Radstock Network, Bright Hope for Tomorrow, Selah House and the Clarington East Food Bank.`,
+  },
+  { q: 'Can I listen to past sermons?', a: 'Yes. Every Sunday message since 2022 is on our Sermons page, searchable by series, speaker and Bible passage, and available as a podcast.' },
+  { q: 'How can I give to Village Church?', a: giving },
+  { q: 'How do I contact the church or ask for pastoral care?', a: `Call ${church.phone} or email ${church.email}. ${care}` },
 ];
 
 // Floating theme switcher for design feedback. Set to false once a theme is chosen.

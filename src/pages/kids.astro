@@ -5,7 +5,12 @@ import { kids, church, sunday } from '../data/site';
 import kidsPhoto from '../assets/kids.jpg';
 ---
 
-<Base title="Kids" description={kids.intro}>
+<Base
+  title="Kids ministry"
+  description="Kids at Village Church Newcastle: a Sunday program for ages 4–12 and nursery for ages 0–4, with child protection policies in place."
+  markdown="/kids.md"
+  breadcrumbs={[{ name: 'Kids', path: '/kids/' }]}
+>
   <section class="page-head">
     <div class="wrap grid grid-2 intro">
       <div>
@@ -56,7 +61,7 @@ import kidsPhoto from '../assets/kids.jpg';
   }
   .safety {
     font-weight: 600;
-    color: var(--accent-strong);
+    color: var(--link);
     margin-block: 1.5rem;
   }
 </style>

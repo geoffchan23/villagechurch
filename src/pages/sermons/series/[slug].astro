@@ -2,7 +2,8 @@
 import { u } from '../../../lib/url';
 import Base from '../../../layouts/Base.astro';
 import SermonRow from '../../../components/SermonRow.astro';
-import { seriesList, prettyDate } from '../../../lib/sermons';
+import { seriesList, prettyDate, sermonHref } from '../../../lib/sermons';
+import { abs } from '../../../lib/schema';
 
 export function getStaticPaths() {
   return seriesList().map((s) => ({ params: { slug: s.slug }, props: { series: s } }));
@@ -14,7 +15,18 @@ const range = series.first === series.latest ? prettyDate(series.latest) : `${pr
 const items = [...series.items].reverse();
 ---
 
-<Base title={`${series.name} series`} description={`${series.items.length} sermons from the ${series.name} series at Village Church Newcastle.`}>
+<Base
+  title={`${series.name} sermon series`}
+  description={`${series.items.length} ${series.items.length === 1 ? 'sermon' : 'sermons'} from the ${series.name} series at Village Church Newcastle${speakers.length ? `, with ${speakers.join(', ')}` : ''} (${range}).`}
+  breadcrumbs={[{ name: 'Sermons', path: '/sermons/' }, { name: series.name, path: `/sermons/series/${series.slug}/` }]}
+  schema={[{
+    '@type': 'CreativeWorkSeries',
+    name: `${series.name} sermon series`,
+    url: abs(`/sermons/series/${series.slug}/`, Astro.site!),
+    publisher: { '@id': abs('/#church', Astro.site!) },
+    hasPart: items.map((s) => ({ '@type': 'PodcastEpisode', name: s.title, url: abs(sermonHref(s), Astro.site!), datePublished: s.date })),
+  }]}
+>
   <section class="page-head">
     <div class="wrap">
       <a href={u('/sermons/')} class="back">← All sermons</a>

@@ -12,25 +12,46 @@ import { ClientRouter } from 'astro:transitions';
 import { Image } from 'astro:assets';
 import Player from '../components/Player.astro';
 import ThemePicker from '../components/ThemePicker.astro';
+import { getImage } from 'astro:assets';
 import logo from '../assets/logo.png';
+import gathering from '../assets/gathering.jpg';
 import { church, nav, sunday, showThemePicker } from '../data/site';
+import { churchSchema, websiteSchema, breadcrumbSchema } from '../lib/schema';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Absolute or root-relative share image; defaults to the Sunday gathering photo. */
   image?: string;
+  ogType?: 'website' | 'article' | 'music.song' | 'video.other';
+  /** Trail below Home, e.g. [{ name: 'Sermons', path: '/sermons/' }]. */
+  breadcrumbs?: { name: string; path: string }[];
+  /** Extra schema.org nodes for this page (merged into one @graph). */
+  schema?: Record<string, unknown>[];
+  /** Plain-markdown twin of this page, for LLMs and readers (e.g. '/about.md'). */
+  markdown?: string;
 }
-const { title, description = church.welcome, image } = Astro.props;
+const { title, description = church.description, image, ogType = 'website', breadcrumbs, schema = [], markdown } = Astro.props;
 const fullTitle = title ? `${title} · ${church.name}` : `${church.name} · Sundays ${sunday.time}`;
 const path = Astro.url.pathname;
 // Preview builds (served under a sub-path) stay out of search results.
 const isPreview = import.meta.env.BASE_URL !== '/';
 const canonical = new URL(path, Astro.site);
-const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
+const defaultOg = await getImage({ src: gathering, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogImage = new URL(image ?? defaultOg.src, Astro.site).href;
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    churchSchema(Astro.site!, new URL(defaultOg.src, Astro.site).href),
+    websiteSchema(Astro.site!),
+    ...(breadcrumbs ? [breadcrumbSchema(Astro.site!, breadcrumbs)] : []),
+    ...schema,
+  ],
+};
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-CA">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,12 +62,23 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
     <link rel="apple-touch-icon" href={u('/favicon.png')} />
     <link rel="alternate" type="application/rss+xml" title="Village Church Newcastle Sermons" href={u('/podcast.xml')} />
     <meta name="theme-color" content="#4a2e22" />
-    <meta property="og:type" content="website" />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
+    {markdown && <link rel="alternate" type="text/markdown" title="Markdown version" href={u(markdown)} />}
+    <link rel="alternate" type="text/plain" title="LLM summary" href={u('/llms.txt')} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content={church.name} />
     <meta property="og:title" content={title ?? church.name} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? church.name} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="geo.region" content="CA-ON" />
+    <meta name="geo.placename" content="Newcastle, Ontario" />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     <slot name="head" />
     {isPreview && <meta name="robots" content="noindex" />}
     <script is:inline>
@@ -155,9 +187,9 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
     position: sticky;
     top: 0;
     z-index: 40;
-    background: color-mix(in srgb, var(--light) 92%, transparent);
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
+    border-bottom: var(--border-w) solid var(--line);
   }
   .site-header__inner {
     display: flex;
@@ -171,7 +203,7 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
     align-items: center;
     gap: 0.7rem;
     text-decoration: none;
-    color: var(--dark);
+    color: var(--heading);
   }
   .brand__logo {
     width: 52px;
@@ -186,7 +218,7 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
     font: 600 0.68rem/1.4 var(--font-body);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--accent-strong);
+    color: var(--link);
   }
   .site-nav {
     display: flex;
@@ -194,7 +226,7 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
     gap: clamp(0.75rem, 2.5vw, 2rem);
   }
   .site-nav a:not(.btn) {
-    color: var(--dark);
+    color: var(--heading);
     text-decoration: none;
     font-weight: 500;
     padding-block: 0.4rem;
@@ -225,7 +257,7 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
       display: block;
       width: 22px;
       height: 2px;
-      background: var(--dark);
+      background: var(--heading);
       position: relative;
       content: '';
       transition: transform 0.2s;
@@ -257,12 +289,12 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
       align-items: stretch;
       gap: 0;
       padding: 0.5rem var(--gutter) 1.25rem;
-      background: var(--light);
-      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+      border-bottom: var(--border-w) solid var(--line);
     }
     .site-nav a:not(.btn) {
       padding: 0.85rem 0;
-      border-bottom: 1px solid var(--line);
+      border-bottom: var(--border-w) solid var(--line);
       font-size: 1.1rem;
     }
     .site-nav__cta {
@@ -275,13 +307,13 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
   }
 
   .site-footer {
-    background: var(--dark);
-    color: color-mix(in srgb, var(--light) 85%, transparent);
+    background: var(--inverse-bg);
+    color: color-mix(in srgb, var(--inverse-fg) 85%, transparent);
     padding-block: 3.5rem 1.5rem;
     font-size: 0.95rem;
   }
   .site-footer a {
-    color: var(--light);
+    color: var(--inverse-fg);
   }
   .site-footer__grid {
     display: grid;
@@ -290,20 +322,20 @@ const ogImage = new URL(image ?? u('/podcast-cover.png'), Astro.site);
   }
   .site-footer__name {
     font: var(--heading-weight) 1.35rem var(--font-heading);
-    color: var(--light);
+    color: var(--inverse-fg);
     margin-bottom: 0.3rem;
   }
   .site-footer__label {
     font: 600 0.75rem var(--font-body);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--inverse-accent);
     margin-bottom: 0.5rem;
   }
   .site-footer__base {
     margin-top: 2.5rem;
     padding-top: 1.25rem;
-    border-top: 1px solid color-mix(in srgb, #fff 12%, transparent);
+    border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
     font-size: 0.85rem;
     opacity: 0.7;
   }

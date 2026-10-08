@@ -5,7 +5,12 @@ import { values, beliefs, history, partners } from '../data/site';
 import preaching from '../assets/preaching.jpg';
 ---
 
-<Base title="About us" description="Who we are: the values, beliefs, history and partnerships of Village Church Newcastle.">
+<Base
+  title="About us"
+  description="About Village Church Newcastle: our story since 2021, our values, what we believe, and our partnerships in Clarington, Canada and around the world."
+  markdown="/about.md"
+  breadcrumbs={[{ name: 'About', path: '/about/' }]}
+>
   <section class="page-head">
     <div class="wrap">
       <span class="eyebrow">About us</span>
@@ -89,19 +94,19 @@ import preaching from '../assets/preaching.jpg';
     margin-top: 2rem;
   }
   .value {
-    border-top: 2px solid var(--dark);
+    border-top: 2px solid var(--heading);
     padding-top: 1.25rem;
   }
   .value__n {
     font: 600 0.85rem var(--font-body);
-    color: var(--accent-strong);
+    color: var(--link);
   }
   .value p {
     color: var(--muted);
   }
   .belief {
     font: 400 1.25rem/1.55 var(--font-heading);
-    color: var(--dark);
+    color: var(--heading);
   }
   .creeds {
     margin-top: 2rem;

@@ -36,7 +36,7 @@ const { sermon: s } = Astro.props;
     align-items: center;
     gap: 1rem;
     padding: 1rem 0;
-    border-bottom: 1px solid var(--line);
+    border-bottom: var(--border-w) solid var(--line);
   }
   .row__body {
     flex: 1;
@@ -44,7 +44,7 @@ const { sermon: s } = Astro.props;
   }
   .row__title {
     font: var(--heading-weight) 1.12rem/1.3 var(--font-heading);
-    color: var(--dark);
+    color: var(--heading);
     text-decoration: none;
   }
   .row__title:hover {
@@ -59,7 +59,7 @@ const { sermon: s } = Astro.props;
     margin-top: 0.15rem;
   }
   .row__series {
-    color: var(--accent-strong);
+    color: var(--link);
     font-weight: 500;
   }
   .row__side {

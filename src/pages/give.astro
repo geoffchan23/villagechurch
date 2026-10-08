@@ -3,7 +3,12 @@ import Base from '../layouts/Base.astro';
 import { church, giving, partners } from '../data/site';
 ---
 
-<Base title="Give" description="Support the life and mission of Village Church Newcastle.">
+<Base
+  title="Give"
+  description="How to give to Village Church Newcastle online through Vision Ministries Canada, with tax-deductible receipts."
+  markdown="/give.md"
+  breadcrumbs={[{ name: 'Give', path: '/give/' }]}
+>
   <section class="page-head">
     <div class="narrow">
       <span class="eyebrow">Give</span>

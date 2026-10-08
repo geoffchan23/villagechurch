@@ -36,10 +36,23 @@ npm run dev    # http://localhost:4321
 
 ## Themes
 
-Five themes live in `src/styles/global.css` (Cabin, Woodland, Lakeshore, Modern, Harvest).
-A floating **Theme** button lets reviewers switch; `?theme=woodland` links straight to one.
-To pick a final theme, move its values into the `:root` block and set `showThemePicker = false`
-in `src/data/site.ts`.
+Six themes live in `src/styles/global.css`: Cabin (default), Midnight, Editorial, Sunrise,
+Block and Meadow. Each sets palette, type and shape tokens, plus a block of structural
+overrides (hero treatment, cards, nav). A floating **Theme** button lets reviewers switch;
+`?theme=editorial` links straight to one. To pick a final theme, make it the `:root` default
+and set `showThemePicker = false` in `src/data/site.ts`.
+
+## SEO & AI assistants
+
+- Per-page titles, descriptions, canonical URLs, Open Graph/Twitter cards
+- schema.org JSON-LD: `Church` (address, phone, weekly Sunday `Event`), `WebSite` with
+  sermon search, `FAQPage`, `BreadcrumbList`, `PodcastEpisode` + `VideoObject` per sermon,
+  `CreativeWorkSeries` per series
+- `sitemap-index.xml`, `robots.txt` (AI crawlers explicitly allowed), podcast RSS
+- `llms.txt` and `llms-full.txt`, a markdown twin of every page (`/about.md`,
+  `/sermons/<slug>.md`, …) and an open `sermons.json`
+- FAQ answers are in `src/data/site.ts` — keep them factual; they're quoted verbatim
+- Preview builds are `noindex`; production builds aren't
 
 ## Preview vs live
 
