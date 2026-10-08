@@ -128,3 +128,6 @@ export const nav = [
   { label: 'Sermons', href: '/sermons/' },
   { label: 'Give', href: '/give/' },
 ];
+
+// Floating theme switcher for design feedback. Set to false once a theme is chosen.
+export const showThemePicker = true;

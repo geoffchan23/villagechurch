@@ -34,11 +34,30 @@ npm run sync   # refresh sermons
 npm run dev    # http://localhost:4321
 ```
 
+## Themes
+
+Five themes live in `src/styles/global.css` (Cabin, Woodland, Lakeshore, Modern, Harvest).
+A floating **Theme** button lets reviewers switch; `?theme=woodland` links straight to one.
+To pick a final theme, move its values into the `:root` block and set `showThemePicker = false`
+in `src/data/site.ts`.
+
+## Preview vs live
+
+The preview builds to https://geoffreychan.com/villagechurch/ (noindexed). The workflow reads
+optional repo variables (Settings → Secrets and variables → Actions → Variables):
+
+| Variable | Preview (default) | Live |
+| --- | --- | --- |
+| `SITE_URL` | `https://geoffreychan.com` | `https://villagechurch.ca` |
+| `BASE_PATH` | `/villagechurch` | `/` |
+| `CUSTOM_DOMAIN` | _(unset)_ | `villagechurch.ca` |
+
 ## Going live (DNS at Namecheap)
 
-1. Repo → Settings → Pages → Source: **GitHub Actions**. Custom domain: `villagechurch.ca` (`public/CNAME`).
-2. In Namecheap Advanced DNS, replace the current A record (`155.138.146.235`, Cloudways) with:
+1. Set the three repo variables above and re-run the workflow.
+2. Repo → Settings → Pages → Custom domain: `villagechurch.ca`.
+3. In Namecheap Advanced DNS, replace the current A record (`155.138.146.235`, Cloudways) with:
    - `A @` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - `CNAME www` → `<github-user>.github.io.`
-3. Leave the MX/email records alone.
-4. Once the certificate is issued, tick **Enforce HTTPS**.
+   - `CNAME www` → `geoffchan23.github.io.`
+4. Leave the MX/TXT (email) records alone.
+5. Once the certificate is issued, tick **Enforce HTTPS**.

@@ -3,12 +3,14 @@
 import type { APIRoute } from 'astro';
 import { sermons, sermonHref } from '../lib/sermons';
 import { church } from '../data/site';
+import { u } from '../lib/url';
 
 const esc = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c]!);
 const rfc822 = (d: string) => new Date(d + 'T15:00:00Z').toUTCString();
 
 export const GET: APIRoute = ({ site }) => {
-  const abs = (p: string) => new URL(p, site).href;
+  // sermonHref() already includes the base path; everything else gets it here.
+  const abs = (p: string) => new URL(p.startsWith(import.meta.env.BASE_URL) ? p : u(p), site).href;
   const items = sermons
     .filter((s) => s.audio)
     .map((s) => {

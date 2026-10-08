@@ -29,7 +29,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Preview lives under a sub-path. When going live on villagechurch.ca, set the repo
+      # variables SITE_URL=https://villagechurch.ca and BASE_PATH=/ (and CUSTOM_DOMAIN).
       - run: npm run build
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://geoffreychan.com' }}
+          BASE_PATH: ${{ vars.BASE_PATH || '/villagechurch' }}
+      - if: ${{ vars.CUSTOM_DOMAIN }}
+        run: echo "${{ vars.CUSTOM_DOMAIN }}" > dist/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

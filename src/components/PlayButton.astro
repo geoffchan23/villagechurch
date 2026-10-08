@@ -33,14 +33,14 @@ const { sermon, size = 'sm', label } = Astro.props;
     gap: 0.5rem;
     border: 0;
     border-radius: 999px;
-    background: var(--brown);
-    color: var(--cream);
+    background: var(--dark);
+    color: var(--light);
     cursor: pointer;
-    font: 600 1rem var(--sans);
+    font: 600 1rem var(--font-body);
     transition: background 0.15s, transform 0.15s;
   }
   .play:hover {
-    background: var(--sage-deep);
+    background: var(--accent-strong);
     transform: scale(1.05);
   }
   .play--sm {
@@ -72,6 +72,6 @@ const { sermon, size = 'sm', label } = Astro.props;
     display: block;
   }
   .play[data-playing='true'] {
-    background: var(--sage-deep);
+    background: var(--accent-strong);
   }
 </style>

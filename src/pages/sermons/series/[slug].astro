@@ -1,4 +1,5 @@
 ---
+import { u } from '../../../lib/url';
 import Base from '../../../layouts/Base.astro';
 import SermonRow from '../../../components/SermonRow.astro';
 import { seriesList, prettyDate } from '../../../lib/sermons';
@@ -16,7 +17,7 @@ const items = [...series.items].reverse();
 <Base title={`${series.name} series`} description={`${series.items.length} sermons from the ${series.name} series at Village Church Newcastle.`}>
   <section class="page-head">
     <div class="wrap">
-      <a href="/sermons/" class="back">← All sermons</a>
+      <a href={u('/sermons/')} class="back">← All sermons</a>
       <span class="eyebrow">Series</span>
       <h1>{series.name}</h1>
       <p class="lede">{series.items.length} {series.items.length === 1 ? 'message' : 'messages'} · {range}</p>

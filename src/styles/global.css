@@ -1,24 +1,121 @@
 /* Palette lifted from the Village Church cabin logo: cabin brown, sage, cream. */
-:root {
-  --cream: #f6f1e7;
-  --paper: #fffdf8;
-  --sand: #ebe3d3;
-  --brown: #4a2e22;
-  --brown-ink: #2e1c15;
-  --sage: #7fa39c;
-  --sage-deep: #3f6b63;
-  --sage-pale: #dfe9e5;
-  --rust: #b5603c;
+/* ---------------------------------------------------------------------------
+   Themes. Every colour and font on the site comes from these tokens.
+   :root is the default ("Cabin"); [data-theme] blocks override it.
+   Roles: light = page background, surface = cards/bands, dark = headings,
+   buttons and dark bands (footer), darkest = body text and the player,
+   accent/accent-strong = links & highlights, tint = soft section colour.
+   ------------------------------------------------------------------------ */
+:root,
+[data-theme='cabin'] {
+  /* Lifted from the cabin logo: cabin brown, sage, cream. */
+  --light: #f6f1e7;
+  --surface: #fffdf8;
+  --dark: #4a2e22;
+  --darkest: #2e1c15;
+  --accent: #7fa39c;
+  --accent-strong: #3f6b63;
+  --tint: #dfe9e5;
+  --highlight: #b5603c;
   --muted: #6d5d55;
   --line: #ddd2bf;
+  --font-heading: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --heading-weight: 600;
+  --heading-settings: 'SOFT' 50, 'WONK' 0;
+  --heading-tracking: -0.01em;
+  --radius: 14px;
+  --btn-radius: 999px;
+}
 
-  --serif: 'Fraunces Variable', Georgia, serif;
-  --sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+[data-theme='woodland'] {
+  /* Deep forest green with warm brass — classic, a little more formal. */
+  --light: #f4f1ea;
+  --surface: #fbfaf6;
+  --dark: #1f3b33;
+  --darkest: #142620;
+  --accent: #c9a24a;
+  --accent-strong: #8a6a1f;
+  --tint: #e7ecdf;
+  --highlight: #c9a24a;
+  --muted: #5b6660;
+  --line: #d8d6c8;
+  --font-heading: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Lora Variable', Georgia, serif;
+  --heading-weight: 400;
+  --heading-settings: normal;
+  --heading-tracking: 0;
+  --radius: 4px;
+  --btn-radius: 4px;
+}
 
+[data-theme='lakeshore'] {
+  /* Lake Ontario blues and beach sand — calm and airy. */
+  --light: #f3f6f8;
+  --surface: #ffffff;
+  --dark: #1d3a5c;
+  --darkest: #13263d;
+  --accent: #6fa8c9;
+  --accent-strong: #2a6a92;
+  --tint: #f2ead9;
+  --highlight: #e0894f;
+  --muted: #5a6b7c;
+  --line: #d7e0e8;
+  --font-heading: 'Lora Variable', Georgia, serif;
+  --font-body: 'Outfit Variable', system-ui, sans-serif;
+  --heading-weight: 600;
+  --heading-settings: normal;
+  --heading-tracking: -0.01em;
+  --radius: 20px;
+  --btn-radius: 999px;
+}
+
+[data-theme='modern'] {
+  /* Clean and contemporary — near-black and white with a sage pop. */
+  --light: #ffffff;
+  --surface: #f5f5f2;
+  --dark: #161616;
+  --darkest: #0c0c0c;
+  --accent: #9cc3a5;
+  --accent-strong: #2f7a4d;
+  --tint: #edf3ee;
+  --highlight: #2f7a4d;
+  --muted: #5f5f5a;
+  --line: #e2e2dc;
+  --font-heading: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --heading-weight: 700;
+  --heading-settings: normal;
+  --heading-tracking: -0.03em;
+  --radius: 8px;
+  --btn-radius: 8px;
+}
+
+[data-theme='harvest'] {
+  /* Warm autumn — terracotta, olive and mustard. Friendly and bold. */
+  --light: #fbf4ea;
+  --surface: #fffaf3;
+  --dark: #7a2e1d;
+  --darkest: #3d1810;
+  --accent: #e0b04a;
+  --accent-strong: #6b7a2a;
+  --tint: #f6e6c8;
+  --highlight: #d4572f;
+  --muted: #7a6152;
+  --line: #ead8c0;
+  --font-heading: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Outfit Variable', system-ui, sans-serif;
+  --heading-weight: 750;
+  --heading-settings: 'SOFT' 100, 'WONK' 1;
+  --heading-tracking: -0.02em;
+  --radius: 22px;
+  --btn-radius: 999px;
+}
+
+:root {
   --wrap: 72rem;
   --gutter: clamp(1rem, 4vw, 2rem);
-  --radius: 14px;
-  --shadow: 0 1px 2px rgb(46 28 21 / 0.06), 0 8px 24px rgb(46 28 21 / 0.08);
+  --shadow: 0 1px 2px color-mix(in srgb, var(--darkest) 6%, transparent), 0 8px 24px color-mix(in srgb, var(--darkest) 8%, transparent);
   --player-h: 0px;
 }
 
@@ -35,11 +132,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--cream);
-  color: var(--brown-ink);
-  font: 400 1.0625rem/1.65 var(--sans);
+  background: var(--light);
+  color: var(--darkest);
+  font: 400 1.0625rem/1.65 var(--font-body);
   padding-bottom: var(--player-h);
-  transition: padding-bottom 0.25s ease;
+  transition: padding-bottom 0.25s ease, background-color 0.3s;
 }
 
 img {
@@ -49,28 +146,28 @@ img {
 }
 
 a {
-  color: var(--sage-deep);
+  color: var(--accent-strong);
   text-underline-offset: 0.18em;
 }
 
 a:hover {
-  color: var(--brown);
+  color: var(--dark);
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--serif);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
   line-height: 1.15;
-  color: var(--brown);
+  color: var(--dark);
   margin: 0 0 0.5em;
-  font-variation-settings: 'SOFT' 50, 'WONK' 0;
+  font-variation-settings: var(--heading-settings);
+  letter-spacing: var(--heading-tracking);
 }
 
 h1 {
   font-size: clamp(2.2rem, 5vw, 3.6rem);
-  letter-spacing: -0.01em;
 }
 
 h2 {
@@ -100,18 +197,18 @@ p {
 }
 
 .section--paper {
-  background: var(--paper);
+  background: var(--surface);
 }
 
 .section--sage {
-  background: var(--sage-pale);
+  background: var(--tint);
 }
 
 .eyebrow {
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.78rem/1 var(--font-body);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--sage-deep);
+  color: var(--accent-strong);
   margin-bottom: 0.9rem;
   display: block;
 }
@@ -127,40 +224,40 @@ p {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.3rem;
-  border-radius: 999px;
-  border: 1.5px solid var(--brown);
-  background: var(--brown);
-  color: var(--cream);
-  font: 600 0.95rem/1 var(--sans);
+  border-radius: var(--btn-radius);
+  border: 1.5px solid var(--dark);
+  background: var(--dark);
+  color: var(--light);
+  font: 600 0.95rem/1 var(--font-body);
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 
 .btn:hover {
-  background: var(--brown-ink);
-  color: var(--cream);
+  background: var(--darkest);
+  color: var(--light);
   transform: translateY(-1px);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--brown);
+  color: var(--dark);
 }
 
 .btn--ghost:hover {
-  background: var(--brown);
+  background: var(--dark);
 }
 
 .btn--light {
-  background: var(--cream);
-  color: var(--brown);
-  border-color: var(--cream);
+  background: var(--light);
+  color: var(--dark);
+  border-color: var(--light);
 }
 
 .btn--light:hover {
   background: #fff;
-  color: var(--brown);
+  color: var(--dark);
 }
 
 .grid {
@@ -177,7 +274,7 @@ p {
 }
 
 .card {
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.5rem;
@@ -204,7 +301,7 @@ p {
 }
 
 :focus-visible {
-  outline: 3px solid var(--rust);
+  outline: 3px solid var(--highlight);
   outline-offset: 2px;
 }
 

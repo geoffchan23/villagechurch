@@ -1,4 +1,5 @@
 ---
+import { u } from '../../lib/url';
 import Base from '../../layouts/Base.astro';
 import PlayButton from '../../components/PlayButton.astro';
 import SermonRow from '../../components/SermonRow.astro';
@@ -36,8 +37,8 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
 
   <article class="wrap sermon" data-autoload data-play={playPayload(s)}>
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="/sermons/">Sermons</a>
-      {s.series && (<> <span aria-hidden="true">/</span> <a href={`/sermons/series/${slugify(s.series)}/`}>{s.series}</a></>)}
+      <a href={u('/sermons/')}>Sermons</a>
+      {s.series && (<> <span aria-hidden="true">/</span> <a href={u(`/sermons/series/${slugify(s.series)}/`)}>{s.series}</a></>)}
     </nav>
 
     <header class="sermon__head">
@@ -84,7 +85,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
                   <SermonRow sermon={r} />
                 ))}
               </ul>
-              <a href={`/sermons/series/${slugify(s.series!)}/`}>See the whole series →</a>
+              <a href={u(`/sermons/series/${slugify(s.series!)}/`)}>See the whole series →</a>
             </section>
           )
         }
@@ -112,7 +113,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
               <ul class="topics">
                 {s.topics.map((t) => (
                   <li>
-                    <a href={`/sermons/?q=${encodeURIComponent(t)}`}>{t}</a>
+                    <a href={u(`/sermons/?q=${encodeURIComponent(t)}`)}>{t}</a>
                   </li>
                 ))}
               </ul>
@@ -122,7 +123,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
         <div class="card">
           <h3>Never miss one</h3>
           <p>Get new sermons in your podcast app.</p>
-          <a href="/podcast.xml">Podcast feed (RSS)</a>
+          <a href={u('/podcast.xml')}>Podcast feed (RSS)</a>
         </div>
       </aside>
     </div>
@@ -165,7 +166,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
     margin-top: 1.5rem;
   }
   .sermon__resume {
-    color: var(--rust);
+    color: var(--highlight);
     font-weight: 600;
     font-size: 0.92rem;
   }
@@ -225,7 +226,7 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
     display: inline-block;
     padding: 0.2rem 0.7rem;
     border-radius: 999px;
-    background: var(--sage-pale);
+    background: var(--tint);
     text-decoration: none;
     font-size: 0.88rem;
   }
@@ -240,12 +241,12 @@ const description = [s.speaker && `${s.speaker}`, prettyDate(s.date), s.series &
   .pager a {
     display: grid;
     max-width: 45%;
-    font: 600 1.05rem/1.3 var(--serif);
-    color: var(--brown);
+    font: var(--heading-weight) 1.05rem/1.3 var(--font-heading);
+    color: var(--dark);
     text-decoration: none;
   }
   .pager small {
-    font: 500 0.82rem var(--sans);
+    font: 500 0.82rem var(--font-body);
     color: var(--muted);
   }
   .pager__next {

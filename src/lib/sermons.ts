@@ -1,4 +1,5 @@
 import raw from '../data/sermons.json';
+import { u } from './url';
 
 export type Sermon = {
   id: number;
@@ -15,7 +16,7 @@ export type Sermon = {
 
 export const sermons = raw as Sermon[];
 
-export const sermonHref = (s: Sermon) => `/sermons/${s.slug}/`;
+export const sermonHref = (s: Sermon) => u(`/sermons/${s.slug}/`);
 
 export const prettyDate = (d: string, month: 'short' | 'long' = 'long') =>
   new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { month, day: 'numeric', year: 'numeric' });
