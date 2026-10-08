@@ -1,0 +1,356 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import PlayButton from '../components/PlayButton.astro';
+import SermonRow from '../components/SermonRow.astro';
+import { church, sunday, midweek, team, care } from '../data/site';
+import { sermons, sermonHref, prettyDate, minutes } from '../lib/sermons';
+import gathering from '../assets/gathering.jpg';
+import worship from '../assets/worship.jpg';
+import lunch from '../assets/lunch.jpg';
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/team/*.jpg', { eager: true });
+const photo = (name: string) => photos[`../assets/team/${name}.jpg`].default;
+
+const [latest, ...recent] = sermons;
+const mapQuery = encodeURIComponent(`${church.address.street}, ${church.address.city}`);
+---
+
+<Base>
+  <section class="hero">
+    <Image src={gathering} alt="The Village Church gathering for Sunday worship in the school gym" class="hero__img" widths={[800, 1400, 2200]} sizes="100vw" loading="eager" />
+    <div class="hero__shade"></div>
+    <div class="wrap hero__content">
+      <p class="hero__tag">{church.tagline.map((t) => <span>{t}</span>)}</p>
+      <h1>You’re welcome here.</h1>
+      <p class="hero__lede">{church.welcome} We’d love to get to know you.</p>
+      <div class="hero__ctas">
+        <a href="#visit" class="btn btn--light">Join us Sunday at {sunday.time}</a>
+        <a href="/sermons/" class="btn btn--ghost hero__ghost">Listen to sermons</a>
+      </div>
+    </div>
+  </section>
+
+  {
+    latest && (
+      <section class="section section--paper">
+        <div class="wrap latest">
+          <div class="latest__card">
+            <span class="eyebrow">Latest message · {prettyDate(latest.date)}</span>
+            <h2>
+              <a href={sermonHref(latest)}>{latest.title}</a>
+            </h2>
+            <p class="latest__meta">
+              {[latest.speaker, latest.series && `${latest.series} series`, latest.passages.join('; ')].filter(Boolean).join(' · ')}
+            </p>
+            <div class="latest__actions">
+              <PlayButton sermon={latest} size="lg" label={latest.audio ? `Listen · ${minutes(latest.audio.duration)}` : undefined} />
+              {latest.video && (
+                <a href={`${sermonHref(latest)}#watch`} class="btn btn--ghost">
+                  Watch
+                </a>
+              )}
+              <span class="latest__resume" data-resume-for={latest.id} hidden />
+            </div>
+          </div>
+          <div class="latest__recent">
+            <h3>Recent messages</h3>
+            <ul class="latest__list">
+              {recent.slice(0, 4).map((s) => (
+                <SermonRow sermon={s} />
+              ))}
+            </ul>
+            <a href="/sermons/" class="latest__all">All {sermons.length} sermons →</a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section" id="visit">
+    <div class="wrap grid grid-2 visit">
+      <div>
+        <span class="eyebrow">Plan a visit</span>
+        <h2>Sundays at {sunday.time}</h2>
+        <p class="lede">Coffee is ready by {sunday.coffee}.</p>
+        <p>{sunday.summary}</p>
+        <p>{sunday.after}</p>
+        <dl class="visit__facts">
+          <div>
+            <dt>Where</dt>
+            <dd>
+              {church.address.venue}<br />{church.address.street}<br />{church.address.city}
+            </dd>
+          </div>
+          <div>
+            <dt>Kids</dt>
+            <dd>Nursery (0–4) and kids’ classes (4–12). <a href="/kids/">More about kids</a></dd>
+          </div>
+        </dl>
+        <a class="btn" href={church.address.mapUrl}>Get directions</a>
+      </div>
+      <div class="visit__media">
+        <Image src={worship} alt="Worship team leading songs on a Sunday morning" class="photo visit__photo" widths={[500, 900]} sizes="(max-width: 760px) 100vw, 36rem" />
+        <iframe
+          class="visit__map"
+          title="Map to Newcastle Public School"
+          src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sage">
+    <div class="wrap grid grid-2 midweek">
+      <Image src={lunch} alt="People chatting over lunch after the Sunday service" class="photo" widths={[500, 900]} sizes="(max-width: 760px) 100vw, 36rem" />
+      <div>
+        <span class="eyebrow">Through the week</span>
+        <h2>Church is more than Sunday</h2>
+        <p>{midweek.intro}</p>
+        <ul class="chips">{midweek.groups.map((g) => <li>{g}</li>)}</ul>
+        <p>Want to join in? <a href={`mailto:${church.email}`}>Drop us a line</a> and we’ll connect you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap">
+      <span class="eyebrow">Village Church leadership</span>
+      <h2>Meet our team</h2>
+      <div class="grid grid-team">
+        {
+          team.map((m) => (
+            <article class="person">
+              <Image src={photo(m.photo)} alt={m.name} width={320} height={320} class="person__photo" />
+              <h3>{m.name}</h3>
+              <p class="person__role">{m.role}</p>
+              <p class="person__bio">{m.bio}</p>
+              {'link' in m && m.link && <a href={m.link.href}>{m.link.label} →</a>}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section care">
+    <div class="narrow">
+      <span class="eyebrow">Pastoral care</span>
+      <h2>Need someone to talk to?</h2>
+      <p>{care}</p>
+      <p class="care__contact">
+        <a class="btn" href={church.phoneHref}>Call {church.phone}</a>
+        <a class="btn btn--ghost" href={`mailto:${church.email}`}>Email us</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: min(88vh, 46rem);
+    display: grid;
+    align-items: end;
+    color: var(--cream);
+    overflow: hidden;
+  }
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(46 28 21 / 0.15) 0%, rgb(46 28 21 / 0.55) 45%, rgb(46 28 21 / 0.88) 100%);
+  }
+  .hero__content {
+    position: relative;
+    padding-block: 6rem clamp(3rem, 8vw, 5rem);
+  }
+  .hero h1 {
+    color: var(--cream);
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    max-width: 14ch;
+  }
+  .hero__tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    font: 600 0.8rem var(--sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sage-pale);
+  }
+  .hero__lede {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    max-width: 36rem;
+    opacity: 0.92;
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .hero__ghost {
+    color: var(--cream);
+    border-color: rgb(246 241 231 / 0.6);
+  }
+  .hero__ghost:hover {
+    background: rgb(246 241 231 / 0.12);
+    border-color: var(--cream);
+  }
+
+  .latest {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    align-items: start;
+  }
+  .latest__card {
+    background: var(--brown);
+    color: var(--cream);
+    border-radius: calc(var(--radius) * 1.5);
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    background-image: radial-gradient(circle at 100% 0%, rgb(127 163 156 / 0.35), transparent 55%);
+  }
+  .latest__card .eyebrow {
+    color: var(--sage);
+  }
+  .latest__card h2 a {
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .latest__card h2 a:hover {
+    text-decoration: underline;
+  }
+  .latest__meta {
+    opacity: 0.8;
+  }
+  .latest__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .latest__actions :global(.play) {
+    background: var(--cream);
+    color: var(--brown);
+  }
+  .latest__actions :global(.play[data-playing='true']) {
+    background: var(--sage);
+    color: var(--brown-ink);
+  }
+  .latest__actions .btn--ghost {
+    color: var(--cream);
+    border-color: rgb(246 241 231 / 0.5);
+  }
+  .latest__resume {
+    font-size: 0.9rem;
+    color: var(--sage);
+    font-weight: 600;
+  }
+  .latest__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+  .latest__all {
+    font-weight: 600;
+  }
+
+  .visit__facts {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .visit__facts dt {
+    font: 600 0.75rem var(--sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+  }
+  .visit__facts dd {
+    margin: 0.2rem 0 0;
+  }
+  .visit__media {
+    display: grid;
+    gap: 1rem;
+  }
+  .visit__photo {
+    aspect-ratio: 4 / 3;
+  }
+  .visit__map {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: var(--radius);
+    filter: sepia(0.25) saturate(0.85);
+  }
+
+  .midweek {
+    align-items: center;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .chips li {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .grid-team {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    margin-top: 2rem;
+  }
+  .person__photo {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50% 50% var(--radius) var(--radius);
+    margin-bottom: 1rem;
+  }
+  .person h3 {
+    margin-bottom: 0;
+  }
+  .person__role {
+    color: var(--sage-deep);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+  .person__bio {
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .person a {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .care {
+    text-align: center;
+  }
+  .care__contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+</style>

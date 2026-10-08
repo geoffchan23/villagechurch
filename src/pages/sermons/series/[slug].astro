@@ -1,0 +1,47 @@
+---
+import Base from '../../../layouts/Base.astro';
+import SermonRow from '../../../components/SermonRow.astro';
+import { seriesList, prettyDate } from '../../../lib/sermons';
+
+export function getStaticPaths() {
+  return seriesList().map((s) => ({ params: { slug: s.slug }, props: { series: s } }));
+}
+const { series } = Astro.props as { series: ReturnType<typeof seriesList>[number] };
+const speakers = [...new Set(series.items.map((s) => s.speaker).filter(Boolean))];
+const range = series.first === series.latest ? prettyDate(series.latest) : `${prettyDate(series.first, 'short')} – ${prettyDate(series.latest, 'short')}`;
+// Oldest first reads more naturally within a series.
+const items = [...series.items].reverse();
+---
+
+<Base title={`${series.name} series`} description={`${series.items.length} sermons from the ${series.name} series at Village Church Newcastle.`}>
+  <section class="page-head">
+    <div class="wrap">
+      <a href="/sermons/" class="back">← All sermons</a>
+      <span class="eyebrow">Series</span>
+      <h1>{series.name}</h1>
+      <p class="lede">{series.items.length} {series.items.length === 1 ? 'message' : 'messages'} · {range}</p>
+      {speakers.length > 0 && <p class="speakers">With {speakers.join(', ')}</p>}
+    </div>
+  </section>
+  <section class="wrap" style="padding-bottom: 5rem">
+    <ol class="list">
+      {items.map((s) => <SermonRow sermon={s} />)}
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+  }
+  .speakers {
+    color: var(--muted);
+  }
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

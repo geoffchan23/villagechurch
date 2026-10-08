@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { kids, church, sunday } from '../data/site';
+import kidsPhoto from '../assets/kids.jpg';
+---
+
+<Base title="Kids" description={kids.intro}>
+  <section class="page-head">
+    <div class="wrap grid grid-2 intro">
+      <div>
+        <span class="eyebrow">Kids ministry</span>
+        <h1>We love kids!</h1>
+        <p class="lede">{kids.intro.replace(/^We love kids! /, '')}</p>
+      </div>
+      <Image src={kidsPhoto} alt="Kids learning together around a table" class="photo" widths={[400, 800]} sizes="(max-width: 760px) 100vw, 36rem" />
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap grid grid-2">
+      {
+        kids.groups.map((g) => (
+          <div class="card group">
+            <span class="eyebrow">{g.ages}</span>
+            <h2>{g.name}</h2>
+            <p>{g.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="narrow center">
+      <h2>Your first Sunday</h2>
+      <p>
+        We start together at {sunday.time}. Kids up to Grade 6 head to their own classes after the singing, and after the service kids of all
+        ages make use of the gym while everyone hangs out over lunch.
+      </p>
+      <p class="safety">{kids.safety}</p>
+      <a class="btn" href={`mailto:${church.email}?subject=Kids ministry`}>Ask us a question</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    align-items: center;
+  }
+  .group h2 {
+    font-size: 1.8rem;
+  }
+  .center {
+    text-align: center;
+  }
+  .safety {
+    font-weight: 600;
+    color: var(--sage-deep);
+    margin-block: 1.5rem;
+  }
+</style>

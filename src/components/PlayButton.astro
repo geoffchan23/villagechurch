@@ -1,0 +1,77 @@
+---
+import { playPayload, type Sermon } from '../lib/sermons';
+interface Props {
+  sermon: Sermon;
+  size?: 'sm' | 'lg';
+  label?: string;
+}
+const { sermon, size = 'sm', label } = Astro.props;
+---
+
+{
+  sermon.audio && (
+    <button
+      class:list={['play', `play--${size}`, { 'play--labelled': label }]}
+      data-play={playPayload(sermon)}
+      data-sermon-id={sermon.id}
+      aria-pressed="false"
+      aria-label={label ? undefined : `Play “${sermon.title}”`}
+    >
+      <svg class="play__icon play__icon--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+      <svg class="play__icon play__icon--pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+      {label && <span>{label}</span>}
+    </button>
+  )
+}
+
+<style>
+  .play {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--brown);
+    color: var(--cream);
+    cursor: pointer;
+    font: 600 1rem var(--sans);
+    transition: background 0.15s, transform 0.15s;
+  }
+  .play:hover {
+    background: var(--sage-deep);
+    transform: scale(1.05);
+  }
+  .play--sm {
+    width: 44px;
+    height: 44px;
+  }
+  .play--lg {
+    height: 56px;
+    min-width: 56px;
+    padding-inline: 1.1rem 1.5rem;
+  }
+  .play--lg:hover {
+    transform: none;
+  }
+  .play__icon {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+  .play--lg .play__icon {
+    width: 26px;
+    height: 26px;
+  }
+  .play__icon--pause,
+  .play[data-playing='true'] .play__icon--play {
+    display: none;
+  }
+  .play[data-playing='true'] .play__icon--pause {
+    display: block;
+  }
+  .play[data-playing='true'] {
+    background: var(--sage-deep);
+  }
+</style>

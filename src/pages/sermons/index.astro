@@ -1,0 +1,267 @@
+---
+import Base from '../../layouts/Base.astro';
+import SermonRow from '../../components/SermonRow.astro';
+import { sermons, seriesList, speakerList } from '../../lib/sermons';
+
+const series = seriesList();
+const speakers = speakerList();
+const years = [...new Set(sermons.map((s) => s.date.slice(0, 4)))];
+const PAGE = 25;
+---
+
+<Base title="Sermons" description="Listen to or watch Sunday messages from Village Church Newcastle — searchable by series, speaker and Bible passage.">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Sermons</span>
+      <h1>Listen &amp; watch</h1>
+      <p class="lede">
+        Every Sunday message since 2022. Press play and keep browsing — the player follows you around the site and remembers where you left off.
+      </p>
+      <p class="subscribe">
+        <a href="/podcast.xml">Subscribe as a podcast</a>
+        <span aria-hidden="true">·</span>
+        <span>{sermons.length} messages</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap series-strip" aria-label="Series">
+    <h2 class="visually-hidden">Series</h2>
+    <ul class="series-grid">
+      {
+        series.slice(0, 8).map((s) => (
+          <li>
+            <a href={`/sermons/series/${s.slug}/`} class="series-card">
+              <span class="series-card__name">{s.name}</span>
+              <span class="series-card__meta">
+                {s.items.length} {s.items.length === 1 ? 'message' : 'messages'} · {s.latest.slice(0, 4)}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap library">
+    <form class="filters" role="search" onsubmit="return false">
+      <label class="filters__search">
+        <span class="visually-hidden">Search sermons</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.5 10.9l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"></path></svg>
+        <input type="search" name="q" placeholder="Search title, passage, topic…" autocomplete="off" />
+      </label>
+      <label>
+        <span class="visually-hidden">Series</span>
+        <select name="series">
+          <option value="">All series</option>
+          {series.map((s) => <option value={s.name}>{s.name}</option>)}
+        </select>
+      </label>
+      <label>
+        <span class="visually-hidden">Speaker</span>
+        <select name="speaker">
+          <option value="">All speakers</option>
+          {speakers.map((s) => <option value={s.name}>{s.name}</option>)}
+        </select>
+      </label>
+      <label>
+        <span class="visually-hidden">Year</span>
+        <select name="year">
+          <option value="">Any year</option>
+          {years.map((y) => <option value={y}>{y}</option>)}
+        </select>
+      </label>
+    </form>
+
+    <p class="count" aria-live="polite"></p>
+    <ul class="list" data-page={PAGE}>
+      {sermons.map((s) => <SermonRow sermon={s} />)}
+    </ul>
+    <p class="empty" hidden>No sermons match that. Try a different search.</p>
+    <button class="btn btn--ghost more" type="button">Show more</button>
+  </section>
+</Base>
+
+<style>
+  .subscribe {
+    display: flex;
+    gap: 0.6rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .subscribe a {
+    font-weight: 600;
+  }
+  .series-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  }
+  @media (max-width: 760px) {
+    .series-grid {
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: 70%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      padding-bottom: 0.5rem;
+    }
+    .series-grid li {
+      scroll-snap-align: start;
+    }
+  }
+  .series-card {
+    display: grid;
+    gap: 0.2rem;
+    height: 100%;
+    padding: 1.1rem 1.2rem;
+    border-radius: var(--radius);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .series-card:hover {
+    border-color: var(--sage);
+    transform: translateY(-2px);
+  }
+  .series-card__name {
+    font: 600 1.15rem/1.2 var(--serif);
+    color: var(--brown);
+  }
+  .series-card__meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .library {
+    padding-bottom: 5rem;
+  }
+  .filters {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+    position: sticky;
+    top: 4.6rem;
+    z-index: 5;
+    background: var(--cream);
+    padding-block: 0.75rem;
+  }
+  .filters input,
+  .filters select {
+    width: 100%;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--paper);
+    font: inherit;
+    font-size: 0.95rem;
+    color: inherit;
+    padding: 0 0.9rem;
+  }
+  .filters__search {
+    position: relative;
+  }
+  .filters__search svg {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    translate: 0 -50%;
+    width: 20px;
+    fill: var(--muted);
+  }
+  .filters__search input {
+    padding-left: 2.6rem;
+  }
+  @media (max-width: 760px) {
+    .filters {
+      grid-template-columns: 1fr 1fr;
+      position: static;
+    }
+    .filters__search {
+      grid-column: 1 / -1;
+    }
+  }
+  .count {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0;
+  }
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .list :global(.row[hidden]) {
+    display: none;
+  }
+  .more {
+    margin: 2rem auto 0;
+    display: flex;
+  }
+  .more[hidden] {
+    display: none;
+  }
+  .empty {
+    padding: 2rem 0;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  function setup() {
+    const form = document.querySelector<HTMLFormElement>('.filters');
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+    const list = document.querySelector<HTMLElement>('.list')!;
+    const rows = [...list.querySelectorAll<HTMLElement>('.row')];
+    const more = document.querySelector<HTMLButtonElement>('.more')!;
+    const count = document.querySelector('.count')!;
+    const empty = document.querySelector<HTMLElement>('.empty')!;
+    const page = Number(list.dataset.page);
+    let limit = page;
+
+    // Filters live in the URL so a filtered view can be shared.
+    const params = new URLSearchParams(location.search);
+    for (const el of form.elements as any) if (el.name && params.get(el.name)) el.value = params.get(el.name);
+
+    function apply() {
+      const f = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const q = f.q.trim().toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      const filtering = Boolean(q || f.series || f.speaker || f.year);
+      let shown = 0;
+      let matched = 0;
+      for (const r of rows) {
+        const ok =
+          (!f.series || r.dataset.series === f.series) &&
+          (!f.speaker || r.dataset.speaker === f.speaker) &&
+          (!f.year || r.dataset.year === f.year) &&
+          words.every((w) => r.dataset.search!.includes(w));
+        if (ok) matched++;
+        const visible = ok && (filtering || shown < limit);
+        r.hidden = !visible;
+        if (visible) shown++;
+      }
+      more.hidden = filtering || shown >= rows.length;
+      empty.hidden = matched > 0;
+      count.textContent = filtering ? `${matched} ${matched === 1 ? 'sermon' : 'sermons'}` : '';
+
+      const url = new URL(location.href);
+      for (const [k, v] of Object.entries(f)) v ? url.searchParams.set(k, v) : url.searchParams.delete(k);
+      history.replaceState(history.state, '', url);
+    }
+
+    form.addEventListener('input', apply);
+    more.addEventListener('click', () => {
+      limit += page * 2;
+      apply();
+    });
+    apply();
+  }
+  document.addEventListener('astro:page-load', setup);
+</script>

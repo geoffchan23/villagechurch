@@ -1,0 +1,83 @@
+---
+import PlayButton from './PlayButton.astro';
+import { sermonHref, prettyDate, minutes, type Sermon } from '../lib/sermons';
+interface Props {
+  sermon: Sermon;
+}
+const { sermon: s } = Astro.props;
+---
+
+<li
+  class="row"
+  data-series={s.series ?? ''}
+  data-speaker={s.speaker ?? ''}
+  data-year={s.date.slice(0, 4)}
+  data-search={[s.title, s.speaker, s.series, ...s.passages, ...s.topics].filter(Boolean).join(' ').toLowerCase()}
+>
+  <PlayButton sermon={s} />
+  <div class="row__body">
+    <a class="row__title" href={sermonHref(s)}>{s.title}</a>
+    <div class="row__meta">
+      <span>{prettyDate(s.date, 'short')}</span>
+      {s.speaker && <span>{s.speaker}</span>}
+      {s.series && <span class="row__series">{s.series}</span>}
+      {s.passages[0] && s.passages[0] !== s.title && <span>{s.passages[0]}</span>}
+    </div>
+  </div>
+  <div class="row__side">
+    {s.audio && <span class="row__dur">{minutes(s.audio.duration)}</span>}
+    <span class="row__resume" data-resume-for={s.id} hidden></span>
+  </div>
+</li>
+
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .row__title {
+    font: 600 1.12rem/1.3 var(--serif);
+    color: var(--brown);
+    text-decoration: none;
+  }
+  .row__title:hover {
+    text-decoration: underline;
+  }
+  .row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.9rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+  .row__series {
+    color: var(--sage-deep);
+    font-weight: 500;
+  }
+  .row__side {
+    display: grid;
+    justify-items: end;
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .row__resume {
+    color: var(--rust);
+    font-weight: 600;
+    font-size: 0.78rem;
+  }
+  @media (max-width: 520px) {
+    .row__side {
+      display: none;
+    }
+  }
+</style>

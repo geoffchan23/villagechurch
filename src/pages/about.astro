@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { values, beliefs, history, partners } from '../data/site';
+import preaching from '../assets/preaching.jpg';
+---
+
+<Base title="About us" description="Who we are: the values, beliefs, history and partnerships of Village Church Newcastle.">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">About us</span>
+      <h1>A family rooted in Jesus, planted in Newcastle</h1>
+      <p class="lede">From a living room in 2021 to a school gym today — still ordinary people, seeking authentic faith, together.</p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap grid grid-2 story">
+      <div>
+        <span class="eyebrow">Our story</span>
+        <h2>Two couples and one child</h2>
+        <p>{history}</p>
+      </div>
+      <Image src={preaching} alt="Brian Jose preaching in front of the Village Church logo" class="photo story__photo" widths={[400, 800]} sizes="(max-width: 760px) 100vw, 30rem" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <span class="eyebrow">Our values</span>
+      <h2>What shapes us</h2>
+      <div class="grid grid-2 values">
+        {
+          values.map((v, i) => (
+            <div class="value">
+              <span class="value__n">0{i + 1}</span>
+              <h3>{v.title}</h3>
+              <p>{v.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sage" id="beliefs">
+    <div class="narrow">
+      <span class="eyebrow">Our beliefs</span>
+      <h2>What we believe</h2>
+      {beliefs.map((b) => <p class="belief">{b}</p>)}
+      <p class="creeds">
+        Read the <a href="https://www.ccel.org/creeds/nicene.creed.html">Nicene Creed</a> and the <a href="https://www.ccel.org/creeds/apostles.creed.html">Apostles’ Creed</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap">
+      <span class="eyebrow">Our partnerships</span>
+      <h2>Part of something bigger</h2>
+      <p class="lede">
+        Village Church is a member of <a href={partners.network.href}>{partners.network.name}</a>, {partners.network.note}.
+      </p>
+      <div class="grid grid-2 partners">
+        <div>
+          <h3>Around the world</h3>
+          <ul>{partners.global.map((p) => <li><a href={p.href}>{p.name}</a> — {p.note}</li>)}</ul>
+        </div>
+        <div>
+          <h3>Here at home</h3>
+          <ul>{partners.local.map((p) => <li><a href={p.href}>{p.name}</a> — {p.note}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .story {
+    align-items: center;
+  }
+  .story__photo {
+    max-height: 32rem;
+    aspect-ratio: 3 / 4;
+    justify-self: center;
+    max-width: 26rem;
+  }
+  .values {
+    margin-top: 2rem;
+  }
+  .value {
+    border-top: 2px solid var(--brown);
+    padding-top: 1.25rem;
+  }
+  .value__n {
+    font: 600 0.85rem var(--sans);
+    color: var(--sage-deep);
+  }
+  .value p {
+    color: var(--muted);
+  }
+  .belief {
+    font: 400 1.25rem/1.55 var(--serif);
+    color: var(--brown);
+  }
+  .creeds {
+    margin-top: 2rem;
+    color: var(--muted);
+  }
+  .partners {
+    margin-top: 2rem;
+  }
+  .partners ul {
+    padding-left: 1.1rem;
+  }
+  .partners li {
+    margin-bottom: 0.4rem;
+  }
+</style>

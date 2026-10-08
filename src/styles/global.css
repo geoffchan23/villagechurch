@@ -1,0 +1,219 @@
+/* Palette lifted from the Village Church cabin logo: cabin brown, sage, cream. */
+:root {
+  --cream: #f6f1e7;
+  --paper: #fffdf8;
+  --sand: #ebe3d3;
+  --brown: #4a2e22;
+  --brown-ink: #2e1c15;
+  --sage: #7fa39c;
+  --sage-deep: #3f6b63;
+  --sage-pale: #dfe9e5;
+  --rust: #b5603c;
+  --muted: #6d5d55;
+  --line: #ddd2bf;
+
+  --serif: 'Fraunces Variable', Georgia, serif;
+  --sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+
+  --wrap: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --radius: 14px;
+  --shadow: 0 1px 2px rgb(46 28 21 / 0.06), 0 8px 24px rgb(46 28 21 / 0.08);
+  --player-h: 0px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brown-ink);
+  font: 400 1.0625rem/1.65 var(--sans);
+  padding-bottom: var(--player-h);
+  transition: padding-bottom 0.25s ease;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--sage-deep);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--brown);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--brown);
+  margin: 0 0 0.5em;
+  font-variation-settings: 'SOFT' 50, 'WONK' 0;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  margin-inline: auto;
+}
+
+.narrow {
+  width: min(100% - 2 * var(--gutter), 44rem);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.section--paper {
+  background: var(--paper);
+}
+
+.section--sage {
+  background: var(--sage-pale);
+}
+
+.eyebrow {
+  font: 600 0.78rem/1 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  margin-bottom: 0.9rem;
+  display: block;
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--muted);
+  max-width: 40rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--brown);
+  background: var(--brown);
+  color: var(--cream);
+  font: 600 0.95rem/1 var(--sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.btn:hover {
+  background: var(--brown-ink);
+  color: var(--cream);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--brown);
+}
+
+.btn--ghost:hover {
+  background: var(--brown);
+}
+
+.btn--light {
+  background: var(--cream);
+  color: var(--brown);
+  border-color: var(--cream);
+}
+
+.btn--light:hover {
+  background: #fff;
+  color: var(--brown);
+}
+
+.grid {
+  display: grid;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.photo {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  object-fit: cover;
+}
+
+.page-head {
+  padding-block: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

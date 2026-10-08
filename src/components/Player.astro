@@ -1,0 +1,578 @@
+---
+// Site-wide sermon player. It lives in the layout with transition:persist,
+// so audio keeps playing while people browse the rest of the site.
+//
+// Anything on a page can start a sermon with:
+//   <button data-play='{"id":..,"title":..,"speaker":..,"date":..,"url":..,"href":..,"duration":..}'>
+import logo from '../assets/logo.png';
+import { getImage } from 'astro:assets';
+const art = await getImage({ src: logo, width: 256, format: 'png' });
+---
+
+<div id="player" class="player" hidden transition:persist data-art={art.src}>
+  <audio preload="metadata"></audio>
+  <div class="player__bar">
+    <input class="player__seek" type="range" min="0" max="100" step="1" value="0" aria-label="Seek" />
+  </div>
+  <div class="player__inner">
+    <a class="player__info" href="#">
+      <img class="player__art" src={art.src} alt="" width="48" height="48" />
+      <span class="player__text">
+        <span class="player__title"></span>
+        <span class="player__meta"></span>
+      </span>
+    </a>
+
+    <div class="player__controls">
+      <button class="player__btn" data-act="back" aria-label="Back 15 seconds" title="Back 15s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"></path><text x="12" y="16.5" text-anchor="middle">15</text></svg>
+      </button>
+      <button class="player__btn player__btn--main" data-act="toggle" aria-label="Play">
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>
+        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"></path></svg>
+        <span class="i-load" aria-hidden="true"></span>
+      </button>
+      <button class="player__btn" data-act="fwd" aria-label="Forward 30 seconds" title="Forward 30s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2l5 4-5 4V7a6 6 0 1 0 6 6h2a8 8 0 1 1-8-8z"></path><text x="12" y="16.5" text-anchor="middle">30</text></svg>
+      </button>
+    </div>
+
+    <div class="player__time"><span class="t-cur">0:00</span> / <span class="t-dur">0:00</span></div>
+
+    <div class="player__extra">
+      <button class="player__speed" data-act="speed" aria-label="Playback speed">1×</button>
+      <button class="player__btn player__btn--sm" data-act="share" aria-label="Share at this moment" title="Share at this moment">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"></path></svg>
+      </button>
+      <button class="player__btn player__btn--sm" data-act="close" aria-label="Close player" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="player__toast" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+  .player {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 50;
+    background: var(--brown-ink);
+    color: var(--cream);
+    box-shadow: 0 -8px 30px rgb(0 0 0 / 0.18);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .player[hidden] {
+    display: none;
+  }
+  .player__bar {
+    position: relative;
+    height: 6px;
+  }
+  .player__seek {
+    position: absolute;
+    inset: -7px 0 auto 0;
+    width: 100%;
+    height: 20px;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+    --pct: 0%;
+  }
+  .player__seek::-webkit-slider-runnable-track {
+    height: 6px;
+    background: linear-gradient(to right, var(--sage) var(--pct), rgb(255 255 255 / 0.15) var(--pct));
+  }
+  .player__seek::-moz-range-track {
+    height: 6px;
+    background: linear-gradient(to right, var(--sage) var(--pct), rgb(255 255 255 / 0.15) var(--pct));
+  }
+  .player__seek::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -4px;
+    border-radius: 50%;
+    background: var(--cream);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .player__seek::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--cream);
+  }
+  .player:hover .player__seek::-webkit-slider-thumb,
+  .player__seek:focus-visible::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  .player__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: clamp(0.5rem, 2vw, 1.5rem);
+    padding: 0.6rem var(--gutter);
+    max-width: 90rem;
+    margin-inline: auto;
+  }
+  .player__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .player__art {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    flex: none;
+    background: var(--cream);
+  }
+  .player__text {
+    display: grid;
+    min-width: 0;
+  }
+  .player__title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.02rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player__meta {
+    font-size: 0.82rem;
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player__info:hover .player__title {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .player__controls,
+  .player__extra {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .player__btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .player__btn:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+  .player__btn svg {
+    width: 26px;
+    height: 26px;
+    fill: currentColor;
+  }
+  .player__btn text {
+    font: 700 6.5px var(--sans);
+    fill: currentColor;
+  }
+  .player__btn--sm svg {
+    width: 20px;
+    height: 20px;
+  }
+  .player__btn--main {
+    width: 52px;
+    height: 52px;
+    background: var(--cream);
+    color: var(--brown-ink);
+  }
+  .player__btn--main:hover {
+    background: #fff;
+  }
+  .player__btn--main svg {
+    width: 26px;
+    height: 26px;
+  }
+  .i-pause,
+  .i-load,
+  .player[data-state='playing'] .i-play,
+  .player[data-state='loading'] .i-play {
+    display: none;
+  }
+  .player[data-state='playing'] .i-pause {
+    display: block;
+  }
+  .player[data-state='loading'] .i-load {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border: 3px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .player__time {
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+  .player__speed {
+    min-width: 3.2rem;
+    height: 32px;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: 600 0.85rem var(--sans);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .player__speed:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+  .player__toast {
+    position: absolute;
+    bottom: calc(100% + 0.75rem);
+    left: 50%;
+    translate: -50% 0;
+    background: var(--brown);
+    color: var(--cream);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .player__toast.show {
+    opacity: 1;
+  }
+
+  @media (max-width: 760px) {
+    .player__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: 'info controls' 'time extra';
+      row-gap: 0.15rem;
+      padding-block: 0.5rem 0.35rem;
+    }
+    .player__info {
+      grid-area: info;
+    }
+    .player__controls {
+      grid-area: controls;
+    }
+    .player__time {
+      grid-area: time;
+      font-size: 0.78rem;
+    }
+    .player__extra {
+      grid-area: extra;
+    }
+    .player__art {
+      width: 40px;
+      height: 40px;
+    }
+    .player__btn {
+      width: 40px;
+      height: 40px;
+    }
+    .player__btn--main {
+      width: 46px;
+      height: 46px;
+    }
+    .player__speed {
+      height: 28px;
+    }
+  }
+</style>
+
+<script>
+  type Sermon = {
+    id: number;
+    title: string;
+    speaker?: string | null;
+    date?: string;
+    url: string;
+    href: string;
+    duration?: number;
+  };
+
+  const SPEEDS = [1, 1.25, 1.5, 1.75, 2, 0.75];
+  const store = {
+    get(k: string) {
+      try {
+        return localStorage.getItem('vc:' + k);
+      } catch {
+        return null;
+      }
+    },
+    set(k: string, v: string) {
+      try {
+        localStorage.setItem('vc:' + k, v);
+      } catch {}
+    },
+    del(k: string) {
+      try {
+        localStorage.removeItem('vc:' + k);
+      } catch {}
+    },
+  };
+
+  const fmt = (s: number) => {
+    if (!isFinite(s) || s < 0) s = 0;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = Math.floor(s % 60)
+      .toString()
+      .padStart(2, '0');
+    return h ? `${h}:${m.toString().padStart(2, '0')}:${sec}` : `${m}:${sec}`;
+  };
+  const prettyDate = (d?: string) =>
+    d ? new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+  const root = document.getElementById('player')!;
+  const audio = root.querySelector('audio')!;
+  const seek = root.querySelector<HTMLInputElement>('.player__seek')!;
+  const titleEl = root.querySelector('.player__title')!;
+  const metaEl = root.querySelector('.player__meta')!;
+  const infoEl = root.querySelector<HTMLAnchorElement>('.player__info')!;
+  const curEl = root.querySelector('.t-cur')!;
+  const durEl = root.querySelector('.t-dur')!;
+  const speedEl = root.querySelector<HTMLButtonElement>('.player__speed')!;
+  const toastEl = root.querySelector('.player__toast')!;
+  const art = root.dataset.art!;
+
+  let current: Sermon | null = null;
+  let seeking = false;
+  let lastSave = 0;
+
+  // ---- state helpers --------------------------------------------------------
+
+  const savedPos = (id: number) => Number(store.get('pos:' + id)) || 0;
+
+  function savePos(force = false) {
+    if (!current) return;
+    const now = Date.now();
+    if (!force && now - lastSave < 4000) return;
+    lastSave = now;
+    const dur = audio.duration || current.duration || 0;
+    // Treat "nearly finished" as finished so it starts fresh next time.
+    if (dur && audio.currentTime > dur - 20) store.del('pos:' + current.id);
+    else if (audio.currentTime > 5) store.set('pos:' + current.id, String(Math.floor(audio.currentTime)));
+  }
+
+  function setState() {
+    const state = !current ? 'idle' : audio.paused ? 'paused' : audio.readyState < 3 && !audio.paused ? 'loading' : 'playing';
+    root.dataset.state = state;
+    root.querySelector('[data-act="toggle"]')!.setAttribute('aria-label', state === 'playing' ? 'Pause' : 'Play');
+    // Reflect state onto any play buttons on the current page.
+    document.querySelectorAll<HTMLElement>('[data-play]').forEach((b) => {
+      const id = Number(b.dataset.sermonId);
+      const on = current?.id === id && !audio.paused;
+      b.dataset.playing = String(on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = audio.paused ? 'paused' : 'playing';
+  }
+
+  function updateTime() {
+    const dur = audio.duration || current?.duration || 0;
+    const t = audio.currentTime;
+    if (!seeking) {
+      seek.max = String(Math.max(1, Math.floor(dur)));
+      seek.value = String(Math.floor(t));
+    }
+    seek.style.setProperty('--pct', dur ? `${((seeking ? Number(seek.value) : t) / dur) * 100}%` : '0%');
+    curEl.textContent = fmt(seeking ? Number(seek.value) : t);
+    durEl.textContent = fmt(dur);
+  }
+
+  function show() {
+    root.hidden = false;
+    document.documentElement.style.setProperty('--player-h', root.offsetHeight + 'px');
+  }
+
+  function toast(msg: string) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    setTimeout(() => toastEl.classList.remove('show'), 2200);
+  }
+
+  // ---- loading & playback ---------------------------------------------------
+
+  function load(s: Sermon, { at, autoplay = true }: { at?: number; autoplay?: boolean } = {}) {
+    if (current?.id !== s.id) {
+      savePos(true);
+      current = s;
+      audio.src = s.url;
+      titleEl.textContent = s.title;
+      metaEl.textContent = [s.speaker, prettyDate(s.date)].filter(Boolean).join(' · ');
+      infoEl.href = s.href;
+      store.set('last', JSON.stringify(s));
+      const start = at ?? savedPos(s.id);
+      if (start) {
+        audio.addEventListener('loadedmetadata', () => (audio.currentTime = start), { once: true });
+        // Show the resume point right away, before metadata arrives.
+        curEl.textContent = fmt(start);
+      }
+      setMediaSession(s);
+    } else if (at != null) {
+      audio.currentTime = at;
+    }
+    show();
+    updateTime();
+    if (autoplay) play();
+    else setState();
+  }
+
+  function play() {
+    // Only one thing playing at once: pause any sermon videos on the page.
+    document.querySelectorAll('video').forEach((v) => v.pause());
+    audio.playbackRate = Number(store.get('speed')) || 1;
+    root.dataset.state = 'loading';
+    audio.play().catch(() => setState());
+  }
+
+  function setMediaSession(s: Sermon) {
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: s.title,
+      artist: s.speaker ?? 'Village Church Newcastle',
+      album: 'Village Church Newcastle',
+      artwork: [{ src: new URL(art, location.href).href, sizes: '256x256', type: 'image/png' }],
+    });
+  }
+
+  if ('mediaSession' in navigator) {
+    const ms = navigator.mediaSession;
+    ms.setActionHandler('play', play);
+    ms.setActionHandler('pause', () => audio.pause());
+    ms.setActionHandler('seekbackward', (d) => (audio.currentTime -= d.seekOffset || 15));
+    ms.setActionHandler('seekforward', (d) => (audio.currentTime += d.seekOffset || 30));
+    ms.setActionHandler('seekto', (d) => d.seekTime != null && (audio.currentTime = d.seekTime));
+  }
+
+  // ---- events ---------------------------------------------------------------
+
+  audio.addEventListener('timeupdate', () => {
+    updateTime();
+    savePos();
+  });
+  audio.addEventListener('loadedmetadata', updateTime);
+  for (const ev of ['play', 'playing', 'pause', 'waiting', 'canplay', 'ended']) audio.addEventListener(ev, setState);
+  audio.addEventListener('pause', () => savePos(true));
+  audio.addEventListener('ended', () => current && store.del('pos:' + current.id));
+  addEventListener('pagehide', () => savePos(true));
+
+  seek.addEventListener('input', () => {
+    seeking = true;
+    updateTime();
+  });
+  seek.addEventListener('change', () => {
+    audio.currentTime = Number(seek.value);
+    seeking = false;
+    savePos(true);
+  });
+
+  function setSpeed(r: number) {
+    audio.playbackRate = r;
+    speedEl.textContent = `${r}×`;
+    store.set('speed', String(r));
+  }
+  setSpeed(Number(store.get('speed')) || 1);
+
+  root.addEventListener('click', async (e) => {
+    const act = (e.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
+    if (!act) return;
+    if (act === 'toggle') audio.paused ? play() : audio.pause();
+    if (act === 'back') audio.currentTime = Math.max(0, audio.currentTime - 15);
+    if (act === 'fwd') audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
+    if (act === 'speed') setSpeed(SPEEDS[(SPEEDS.indexOf(audio.playbackRate) + 1) % SPEEDS.length]);
+    if (act === 'share' && current) {
+      const url = new URL(current.href, location.href);
+      url.searchParams.set('t', String(Math.floor(audio.currentTime)));
+      if (navigator.share) {
+        navigator.share({ title: current.title, url: url.href }).catch(() => {});
+      } else {
+        await navigator.clipboard.writeText(url.href);
+        toast(`Link copied — starts at ${fmt(audio.currentTime)}`);
+      }
+    }
+    if (act === 'close') {
+      audio.pause();
+      savePos(true);
+      root.hidden = true;
+      document.documentElement.style.setProperty('--player-h', '0px');
+      store.del('last');
+    }
+  });
+
+  // Play buttons anywhere on the site (delegated so it survives page swaps).
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-play]');
+    if (!btn) return;
+    e.preventDefault();
+    const s: Sermon = JSON.parse(btn.dataset.play!);
+    if (current?.id === s.id) audio.paused ? play() : audio.pause();
+    else load(s);
+  });
+
+  // A sermon video starting should pause the audio player.
+  document.addEventListener('play', (e) => e.target instanceof HTMLVideoElement && audio.pause(), true);
+
+  // Space bar toggles playback when not typing.
+  document.addEventListener('keydown', (e) => {
+    if (e.code !== 'Space' || !current || root.hidden) return;
+    const t = e.target as HTMLElement;
+    if (t.closest('input, textarea, select, button, a, video, [contenteditable]')) return;
+    e.preventDefault();
+    audio.paused ? play() : audio.pause();
+  });
+
+  // ---- per-page setup -------------------------------------------------------
+
+  function onPage() {
+    // "Resume from 12:34" hints on sermon pages and cards.
+    document.querySelectorAll<HTMLElement>('[data-resume-for]').forEach((el) => {
+      const pos = savedPos(Number(el.dataset.resumeFor));
+      el.hidden = !pos;
+      if (pos) el.textContent = `Resume at ${fmt(pos)}`;
+    });
+
+    // Shared links: /sermons/xyz/?t=754 cues the sermon at that moment.
+    const auto = document.querySelector<HTMLElement>('[data-autoload]');
+    const t = Number(new URLSearchParams(location.search).get('t'));
+    if (auto && t) load(JSON.parse(auto.dataset.play!), { at: t, autoplay: false });
+
+    setState();
+  }
+
+  // Restore the last sermon (paused) after a full reload.
+  const last = store.get('last');
+  if (last) {
+    try {
+      load(JSON.parse(last), { autoplay: false });
+    } catch {}
+  }
+
+  document.addEventListener('astro:page-load', onPage);
+  addEventListener('resize', () => !root.hidden && show());
+</script>
