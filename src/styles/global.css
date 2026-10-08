@@ -103,20 +103,22 @@
 /* 3. EDITORIAL — a newspaper/magazine feel. Ink, newsprint, one red. */
 [data-theme='editorial'] {
   --light: #f3efe6;
-  --surface: #faf8f3;
+  --surface: #f4f4f2;
   --dark: #111111;
   --darkest: #111111;
   --accent: #d6342b;
   --accent-strong: #b3241c;
-  --tint: #e9e4d8;
+  --tint: #f1f1ee;
   --highlight: #d6342b;
   --muted: #555049;
   --line: #111111;
+  --bg: #ffffff;
+  --header-bg: #ffffff;
   --eyebrow: #d6342b;
   --link: #111111;
   --btn-hover-bg: #d6342b;
   --inverse-bg: #111111;
-  --player-bg: #faf8f3;
+  --player-bg: #ffffff;
   --player-fg: #111111;
   --player-accent: #d6342b;
   --hero-fg: #ffffff;
@@ -149,7 +151,8 @@
   --tint: #ffe4d6;
   --highlight: #ff6b4a;
   --muted: #6b5f86;
-  --line: #f0dfd4;
+  --line: #e6dcf5;
+  --bg: #f5f0ff;
   --btn-bg: #ff6b4a;
   --btn-fg: #ffffff;
   --btn-hover-bg: #2d1b69;
@@ -187,6 +190,7 @@
   --highlight: #ff5c8a;
   --muted: #333333;
   --line: #000000;
+  --bg: #dfe6ff;
   --btn-bg: #ffd23f;
   --btn-fg: #000000;
   --btn-hover-bg: #ff5c8a;
@@ -253,6 +257,105 @@
   --border-w: 1px;
   --photo-filter: saturate(0.9) brightness(1.04);
   --person-radius: 50%;
+}
+
+/* 7. SLATE — cool blue-grey base, navy masthead, teal accents. Calm and civic. */
+[data-theme='slate'] {
+  --light: #f4f7fa;
+  --surface: #ffffff;
+  --dark: #1b2a41;
+  --darkest: #111b2b;
+  --accent: #4fb3bf;
+  --accent-strong: #1f7a86;
+  --tint: #d9e2ea;
+  --highlight: #1f7a86;
+  --muted: #586579;
+  --line: #c9d3dd;
+  --bg: #e8edf2;
+  --header-bg: #1b2a41;
+  --btn-bg: #1f7a86;
+  --btn-fg: #ffffff;
+  --btn-hover-bg: #1b2a41;
+  --hero-accent: #8fd6df;
+  --hero-overlay: linear-gradient(180deg, rgb(27 42 65 / 0.35) 0%, rgb(27 42 65 / 0.92) 100%);
+  --shadow: 0 2px 6px rgb(17 27 43 / 0.08), 0 12px 32px rgb(17 27 43 / 0.1);
+  --font-heading: 'Outfit Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --heading-weight: 600;
+  --heading-settings: normal;
+  --heading-tracking: -0.02em;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 6px;
+  --btn-radius: 6px;
+  --border-w: 1px;
+  --photo-filter: saturate(0.85);
+  --person-radius: 6px;
+}
+
+/* 8. ORCHARD — the whole page on the logo's sage green, cream cards, terracotta. */
+[data-theme='orchard'] {
+  --light: #fbf6ea;
+  --surface: #fbf6ea;
+  --dark: #233a2b;
+  --darkest: #17271d;
+  --accent: #d9774b;
+  --accent-strong: #a8492a;
+  --tint: #b6c9ad;
+  --highlight: #d9774b;
+  --muted: #3f5546;
+  --line: #a9bea0;
+  --bg: #cddbc5;
+  --link: #8c3a1f;
+  --eyebrow: #8c3a1f;
+  --btn-bg: #233a2b;
+  --btn-hover-bg: #a8492a;
+  --inverse-accent: #f0a77f;
+  --hero-accent: #f0c9a8;
+  --hero-overlay: linear-gradient(180deg, rgb(23 39 29 / 0.2) 0%, rgb(23 39 29 / 0.6) 50%, rgb(23 39 29 / 0.9) 100%);
+  --shadow: 0 16px 40px -18px rgb(23 39 29 / 0.45);
+  --font-heading: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Outfit Variable', system-ui, sans-serif;
+  --heading-weight: 650;
+  --heading-settings: 'SOFT' 100, 'WONK' 1;
+  --heading-tracking: -0.02em;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 24px;
+  --btn-radius: 999px;
+  --border-w: 1px;
+  --photo-filter: saturate(0.95) sepia(0.08);
+  --person-radius: 50%;
+}
+
+/* 9. ROSÉ — blush pink base, deep burgundy, centred and elegant. */
+[data-theme='rose'] {
+  --light: #fff7f6;
+  --surface: #fffafa;
+  --dark: #6b1f33;
+  --darkest: #3f0f1d;
+  --accent: #e8a0a8;
+  --accent-strong: #9c2f4b;
+  --tint: #f2d4d4;
+  --highlight: #9c2f4b;
+  --muted: #7a5560;
+  --line: #ebc9c9;
+  --bg: #f8e6e3;
+  --hero-accent: #f6c9cf;
+  --hero-overlay: linear-gradient(180deg, rgb(63 15 29 / 0.45), rgb(63 15 29 / 0.8));
+  --shadow: 0 14px 36px -16px rgb(107 31 51 / 0.35);
+  --font-heading: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --heading-weight: 400;
+  --heading-settings: normal;
+  --heading-tracking: 0;
+  --heading-transform: none;
+  --heading-style: normal;
+  --radius: 4px;
+  --btn-radius: 2px;
+  --border-w: 1px;
+  --photo-filter: sepia(0.12) saturate(0.9);
+  --person-radius: 999px 999px 4px 4px;
 }
 
 :root {
@@ -689,4 +792,96 @@ p {
 :root[data-theme='meadow'] .chips li {
   background: #fff;
   border-color: var(--accent);
+}
+
+/* Slate: dark navy masthead (re-point the header's own tokens), white bands. */
+:root[data-theme='slate'] .site-header {
+  --heading: #ffffff;
+  --link: #8fd6df;
+  --bg: #1b2a41;
+  --line: #2c3e58;
+  --btn-bg: #8fd6df;
+  border-bottom: 0;
+}
+:root[data-theme='slate'] .section--paper {
+  background: #ffffff;
+}
+:root[data-theme='slate'] .eyebrow {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background: var(--tint);
+  border-radius: 4px;
+}
+:root[data-theme='slate'] .hero h1 {
+  font-weight: 700;
+}
+:root[data-theme='slate'] .latest__card {
+  border-left: 6px solid var(--accent);
+  background-image: none;
+}
+
+/* Orchard: cream “paper” bands and cards float on the green page. */
+:root[data-theme='orchard'] .section--paper {
+  background: var(--surface);
+  border-radius: 40px;
+  width: min(100% - 1.5rem, 84rem);
+  margin-inline: auto;
+}
+:root[data-theme='orchard'] .card,
+:root[data-theme='orchard'] .series-card {
+  border: 0;
+  box-shadow: var(--shadow);
+}
+:root[data-theme='orchard'] .photo {
+  border: 8px solid var(--surface);
+}
+:root[data-theme='orchard'] .chips li {
+  background: var(--surface);
+  border: 0;
+}
+:root[data-theme='orchard'] .site-header {
+  border-bottom: 0;
+}
+:root[data-theme='orchard'] .site-footer {
+  border-radius: 40px 40px 0 0;
+}
+
+/* Rosé: centred hero and headings, thin double rules, outline buttons. */
+:root[data-theme='rose'] .hero {
+  align-items: center;
+  text-align: center;
+}
+:root[data-theme='rose'] .hero h1,
+:root[data-theme='rose'] .hero__lede {
+  margin-inline: auto;
+}
+:root[data-theme='rose'] .hero h1 {
+  max-width: none;
+}
+:root[data-theme='rose'] .hero__tag,
+:root[data-theme='rose'] .hero__ctas {
+  justify-content: center;
+}
+:root[data-theme='rose'] .section > .wrap > .eyebrow,
+:root[data-theme='rose'] .section > .wrap > h2 {
+  text-align: center;
+}
+:root[data-theme='rose'] .eyebrow {
+  letter-spacing: 0.3em;
+}
+:root[data-theme='rose'] .btn:not(.btn--light):not(.btn--ghost) {
+  background: transparent;
+  color: var(--dark);
+}
+:root[data-theme='rose'] .btn:not(.btn--light):not(.btn--ghost):hover {
+  background: var(--dark);
+  color: var(--light);
+}
+:root[data-theme='rose'] .site-header {
+  border-bottom: 3px double var(--line);
+}
+:root[data-theme='rose'] .latest__card {
+  outline: 1px solid var(--accent);
+  outline-offset: -10px;
+  background-image: none;
 }

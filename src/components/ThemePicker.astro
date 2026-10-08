@@ -5,10 +5,13 @@
 export const themes = [
   { id: 'cabin', name: 'Cabin', note: 'From the logo — warm cream, brown and sage' },
   { id: 'midnight', name: 'Midnight', note: 'Full dark mode, candlelight gold, airy type' },
-  { id: 'editorial', name: 'Editorial', note: 'Magazine style — ink, newsprint, one red' },
-  { id: 'sunrise', name: 'Sunrise', note: 'Vibrant coral-to-violet, chunky and playful' },
-  { id: 'block', name: 'Block', note: 'Bold poster style — outlines and hard shadows' },
+  { id: 'editorial', name: 'Editorial', note: 'Magazine style — crisp white, ink, one red' },
+  { id: 'sunrise', name: 'Sunrise', note: 'Lilac page, coral-to-violet, chunky and playful' },
+  { id: 'block', name: 'Block', note: 'Periwinkle poster style — outlines, hard shadows' },
   { id: 'meadow', name: 'Meadow', note: 'Soft and light — pale greens, blush, italics' },
+  { id: 'slate', name: 'Slate', note: 'Cool blue-grey, navy masthead, teal' },
+  { id: 'orchard', name: 'Orchard', note: 'Sage-green page with cream cards, terracotta' },
+  { id: 'rose', name: 'Rosé', note: 'Blush pink and burgundy, centred and elegant' },
 ];
 ---
 
@@ -75,6 +78,8 @@ export const themes = [
     left: 0;
     bottom: calc(100% + 0.6rem);
     width: min(20rem, calc(100vw - 2rem));
+    max-height: calc(100vh - var(--player-h) - 6rem);
+    overflow-y: auto;
     background: #fff;
     color: #222;
     border-radius: 14px;

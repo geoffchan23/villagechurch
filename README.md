@@ -36,8 +36,8 @@ npm run dev    # http://localhost:4321
 
 ## Themes
 
-Six themes live in `src/styles/global.css`: Cabin (default), Midnight, Editorial, Sunrise,
-Block and Meadow. Each sets palette, type and shape tokens, plus a block of structural
+Nine themes live in `src/styles/global.css`: Cabin (default), Midnight, Editorial, Sunrise,
+Block, Meadow, Slate, Orchard and Rosé. Each sets palette, type and shape tokens, plus a block of structural
 overrides (hero treatment, cards, nav). A floating **Theme** button lets reviewers switch;
 `?theme=editorial` links straight to one. To pick a final theme, make it the `:root` default
 and set `showThemePicker = false` in `src/data/site.ts`.
