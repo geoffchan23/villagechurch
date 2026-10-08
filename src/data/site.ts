@@ -158,5 +158,8 @@ export const faq = [
   { q: 'How do I contact the church or ask for pastoral care?', a: `Call ${church.phone} or email ${church.email}. ${care}` },
 ];
 
+// The theme everyone sees unless they pick another (see src/styles/global.css).
+export const defaultTheme = 'slate';
+
 // Floating theme switcher for design feedback. Set to false once a theme is chosen.
 export const showThemePicker = true;

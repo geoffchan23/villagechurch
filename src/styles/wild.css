@@ -1108,8 +1108,14 @@
 }
 :root[data-theme='watercolour'] .person__paint {
   display: block;
-  width: 115%;
-  max-width: none;
-  margin: -1rem -7.5% 0.25rem;
+  width: 100%;
   aspect-ratio: 1;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  mix-blend-mode: multiply;
+  /* Fade the paper border into the page. */
+  -webkit-mask: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent), linear-gradient(transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-composite: source-in;
+  mask: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent), linear-gradient(transparent, #000 7%, #000 93%, transparent);
+  mask-composite: intersect;
 }

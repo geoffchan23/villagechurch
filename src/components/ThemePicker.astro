@@ -3,13 +3,13 @@
 // Swatches render with the real theme tokens (each one carries its own
 // data-theme), so adding a theme is just a new block in global.css plus a line here.
 export const themes = [
+  { id: 'slate', name: 'Slate', note: 'Default · Cool blue-grey, navy masthead, teal' },
   { id: 'cabin', name: 'Cabin', note: 'From the logo — warm cream, brown and sage' },
   { id: 'midnight', name: 'Midnight', note: 'Full dark mode, candlelight gold, airy type' },
   { id: 'editorial', name: 'Editorial', note: 'Magazine style — crisp white, ink, one red' },
   { id: 'sunrise', name: 'Sunrise', note: 'Lilac page, coral-to-violet, chunky and playful' },
   { id: 'block', name: 'Block', note: 'Periwinkle poster style — outlines, hard shadows' },
   { id: 'meadow', name: 'Meadow', note: 'Soft and light — pale greens, blush, italics' },
-  { id: 'slate', name: 'Slate', note: 'Cool blue-grey, navy masthead, teal' },
   { id: 'orchard', name: 'Orchard', note: 'Sage-green page with cream cards, terracotta' },
   { id: 'rose', name: 'Rosé', note: 'Blush pink and burgundy, centred and elegant' },
   // Experimental: these change layout and illustration, not just colour.
@@ -190,7 +190,7 @@ const groups = [
   const panel = root.querySelector<HTMLElement>('.tp__panel')!;
   const copy = root.querySelector<HTMLButtonElement>('[data-copy-theme]')!;
 
-  const current = () => document.documentElement.dataset.theme || 'cabin';
+  const current = () => document.documentElement.dataset.theme || 'slate';
 
   function mark() {
     root.querySelectorAll<HTMLElement>('[data-set-theme]').forEach((b) =>

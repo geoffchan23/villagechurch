@@ -23,7 +23,7 @@ import ThemePicker from '../components/ThemePicker.astro';
 import { getImage } from 'astro:assets';
 import logo from '../assets/logo.png';
 import gathering from '../assets/gathering.jpg';
-import { church, nav, sunday, showThemePicker } from '../data/site';
+import { church, nav, sunday, showThemePicker, defaultTheme } from '../data/site';
 import { churchSchema, websiteSchema, breadcrumbSchema } from '../lib/schema';
 
 interface Props {
@@ -59,7 +59,7 @@ const graph = {
 ---
 
 <!doctype html>
-<html lang="en-CA">
+<html lang="en-CA" data-theme={defaultTheme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,7 +69,7 @@ const graph = {
     <link rel="icon" href={u('/favicon.png')} />
     <link rel="apple-touch-icon" href={u('/favicon.png')} />
     <link rel="alternate" type="application/rss+xml" title="Village Church Newcastle Sermons" href={u('/podcast.xml')} />
-    <meta name="theme-color" content="#4a2e22" />
+    <meta name="theme-color" content="#1b2a41" />
     <link rel="sitemap" href={u('/sitemap-index.xml')} />
     {markdown && <link rel="alternate" type="text/markdown" title="Markdown version" href={u(markdown)} />}
     <link rel="alternate" type="text/plain" title="LLM summary" href={u('/llms.txt')} />

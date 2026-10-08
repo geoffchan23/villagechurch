@@ -36,17 +36,17 @@ npm run dev    # http://localhost:4321
 
 ## Themes
 
-Nine themes live in `src/styles/global.css`: Cabin (default), Midnight, Editorial, Sunrise,
-Block, Meadow, Slate, Orchard and Rosé. Each sets palette, type and shape tokens, plus a block of structural
+Nine themes live in `src/styles/global.css`: Slate (the default), Cabin, Midnight, Editorial, Sunrise,
+Block, Meadow, Orchard and Rosé. Each sets palette, type and shape tokens, plus a block of structural
 overrides (hero treatment, cards, nav). A floating **Theme** button lets reviewers switch;
-`?theme=editorial` links straight to one. To pick a final theme, make it the `:root` default
-and set `showThemePicker = false` in `src/data/site.ts`.
+`?theme=editorial` links straight to one. To change the default, set `defaultTheme`
+in `src/data/site.ts`; to hide the switcher, set `showThemePicker = false` there too.
 
 Five experimental themes live in `src/styles/wild.css` — Watercolour, Swiss Grid, Aurora, Riso Zine
 and Desktop 98. They re-lay the page (painted illustration hero, bento tiles, windows, a scrolling
 banner) using CSS only, so content and SEO are identical. Their art is in `src/assets/fx/`
 (hand-written SVG with paint/grain filters). Watercolour also swaps the team photos for painted
-portraits in `src/assets/team/paint/`, made from the real photos with `scripts/watercolour-portraits.html`.
+portraits in `src/assets/team/paint/<photo name>.png` (square images; a missing one falls back to the photo).
 
 ## SEO & AI assistants
 
